@@ -1,0 +1,48 @@
+package com.konate.music_application.usersubdomain.MappingLayer;
+
+//import org.mapstruct.Mapper;
+
+import com.konate.music_application.usersubdomain.DataLayer.User;
+import com.konate.music_application.usersubdomain.PresentationLayer.UserController;
+import com.konate.music_application.usersubdomain.PresentationLayer.UserResponseModel;
+import org.mapstruct.*;
+import org.springframework.hateoas.Link;
+
+import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+
+@Mapper(componentModel = "spring")
+public interface UserResponseMapper {
+
+    @Mappings(
+            {
+                    @Mapping(source = "userIdentifier.userId", target = "userId"),
+                    @Mapping(source = "user.username", target = "username"),
+                    @Mapping(source = "user.email", target = "email"),
+                    @Mapping(source = "user.fullname", target = "fullname"),
+                    @Mapping(source = "user.country", target = "country"),
+                    @Mapping(source = "user.age", target = "age"),
+//                    @Mapping(source = "user.region", target = "region")
+
+
+            }
+    )
+    UserResponseModel toUserResponseModel(User user);
+
+    List<UserResponseModel> entityListResponseModels(List<User> users);
+
+
+    @AfterMapping
+    default void addLinks(@MappingTarget UserResponseModel userResponseModel) {
+        Link selfLink = linkTo(methodOn(UserController.class)
+                .getUserByUsername(userResponseModel.getUsername()))
+                .withSelfRel();
+        Link all = linkTo(methodOn(UserController.class).getAllUsers()).withRel("all users");
+        Link delete = linkTo(methodOn(UserController.class).deleteUser(userResponseModel.getUsername())).withRel("delete");
+        userResponseModel.add(selfLink, all, delete);
+    }
+
+}

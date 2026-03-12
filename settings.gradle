@@ -1,0 +1,13 @@
+include 'ad-service'
+
+include 'api-gateway'
+
+include 'artist-service'
+
+include 'catalog-service'
+
+include 'order-service'
+
+include 'podcast-service'
+
+include 'user-service'
