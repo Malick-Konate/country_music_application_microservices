@@ -1,0 +1,127 @@
+package com.konate.music_application.podcastsubdomain.BusinessLayer.Podcast;
+
+import com.konate.music_application.podcastsubdomain.DataLayer.Podcast.Podcast;
+import com.konate.music_application.podcastsubdomain.DataLayer.Podcast.PodcastIdentifier;
+import com.konate.music_application.podcastsubdomain.DataLayer.Podcast.PodcastRepository;
+import com.konate.music_application.podcastsubdomain.Exceptions.InconsistentPodcastException;
+import com.konate.music_application.podcastsubdomain.Exceptions.InvalidInputException;
+import com.konate.music_application.podcastsubdomain.Exceptions.NotFoundException;
+import com.konate.music_application.podcastsubdomain.MappingLayer.Podcast.PodcastRequestMapper;
+import com.konate.music_application.podcastsubdomain.MappingLayer.Podcast.PodcastResponseMapper;
+import com.konate.music_application.podcastsubdomain.PresentationLayer.Podcast.PodcastRequestModel;
+import com.konate.music_application.podcastsubdomain.PresentationLayer.Podcast.PodcastResponseModel;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class PodcastServiceImpl implements PodcastService {
+
+    private final PodcastResponseMapper responseMapper;
+    private final PodcastRequestMapper requestMapper;
+    private final PodcastRepository podcastRepository;
+
+    public PodcastServiceImpl(PodcastResponseMapper responseMapper, PodcastRequestMapper requestMapper, PodcastRepository podcastRepository) {
+        this.requestMapper = requestMapper;
+        this.responseMapper = responseMapper;
+        this.podcastRepository = podcastRepository;
+    }
+
+    @Override
+    public List<PodcastResponseModel> getAllPodcast() {
+        List<Podcast> podcasts = podcastRepository.findAll();
+//        addLinks
+        return responseMapper.entityListToResponseModelList(podcasts);
+    }
+
+    @Override
+    public PodcastResponseModel getPodcastById(String podcastId) {
+        if (podcastId == null || podcastId.trim().isEmpty())
+            throw new InvalidInputException("Sorry, cannot be null.");
+        Podcast podcast = podcastRepository.findAllByPodcastIdentifier_PodcastId(podcastId);
+
+        if (podcast == null)
+            throw new NotFoundException("Podcast not found with Id: " + podcastId);
+
+        return responseMapper.toResponseModel(podcast);
+    }
+
+    @Override
+    public List<PodcastResponseModel> getPodcastByHosname(String hostname) {
+        if (hostname == null || hostname.trim().isEmpty())
+            throw new InvalidInputException("Sorry, cannot be null.");
+
+        List<Podcast> podcast = podcastRepository.findAllByHostname(hostname);
+        if (podcast == null)
+            throw new NotFoundException("Podcast not found with hostname: " + hostname);
+
+        return responseMapper.entityListToResponseModelList(podcast);
+    }
+
+    @Override
+    public PodcastResponseModel getPodcastByTitle(String title) {
+        if ( title == null || title.trim().trim().isEmpty())
+            throw new InvalidInputException("Sorry, cannot be null.");
+
+        Podcast podcast = podcastRepository.findAllByTitle(title);
+        if (podcast == null)
+            throw new NotFoundException("Podcast not found with title: " + title);
+
+        return responseMapper.toResponseModel(podcast);
+    }
+
+    @Override
+    public PodcastResponseModel createPodcast(PodcastRequestModel requestModel) {
+        if (requestModel == null)
+            throw new IllegalArgumentException("the request cannot be empty or null");
+        validatePodcastInvariants(requestModel); // Run check
+        Podcast podcastEntity = requestMapper.toPodcast(
+                requestModel,
+                new PodcastIdentifier()
+        );
+        Podcast savedPodcast = podcastRepository.save(podcastEntity);
+        return responseMapper.toResponseModel(savedPodcast);
+    }
+
+    @Override
+    public PodcastResponseModel updatePodcast(String podcastId, PodcastRequestModel requestModel) {
+        if (podcastId == null || podcastId.trim().isEmpty() )
+            throw new InvalidInputException("Sorry, cannot be null.");
+
+        Podcast podcastExisting = podcastRepository.findAllByPodcastIdentifier_PodcastId(podcastId);
+        if (requestModel == null)
+            throw new NotFoundException("Podcast request cannot be null");
+
+        validatePodcastInvariants(requestModel); // Run check
+
+        podcastExisting.setDescription(requestModel.getDescription());
+        podcastExisting.setTitle(requestModel.getTitle());
+        podcastExisting.setHostname(requestModel.getHostname());
+        podcastExisting.setPricingModel(requestModel.getPricingModel());
+
+        Podcast updatedPodcast = podcastRepository.save(podcastExisting);
+        return responseMapper.toResponseModel(updatedPodcast);
+    }
+
+    @Override
+    public void deletePodcast(String podcastID) {
+        if (podcastID == null || podcastID.trim().isEmpty())
+            throw new InvalidInputException("Sorry, cannot be null.");
+
+        Podcast podcast = podcastRepository.findAllByPodcastIdentifier_PodcastId(podcastID);
+
+        if (podcast == null)
+            throw new NotFoundException("Podcast not found with Id: " + podcastID);
+
+        podcastRepository.delete(podcast);
+    }
+
+    private void validatePodcastInvariants(PodcastRequestModel request) {
+        if (request.getTitle() == null || request.getTitle().trim().isEmpty()) {
+            throw new InconsistentPodcastException("Podcast title is required.");
+        }
+        if (request.getHostname() == null || request.getHostname().contains(" ")) {
+            throw new InconsistentPodcastException("Hostname must not be empty or contain spaces.");
+        }
+    }
+}

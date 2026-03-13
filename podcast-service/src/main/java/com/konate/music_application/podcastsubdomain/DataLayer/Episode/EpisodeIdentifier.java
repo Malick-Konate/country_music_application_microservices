@@ -1,0 +1,22 @@
+package com.konate.music_application.podcastsubdomain.DataLayer.Episode;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import lombok.Getter;
+
+import static java.util.UUID.randomUUID;
+
+@Embeddable
+@Getter
+public class EpisodeIdentifier {
+    @Column(name = "episode_id")
+    private String episodeId;
+
+    public EpisodeIdentifier(){
+        this.episodeId = "ep_" + randomUUID().toString();
+    }
+
+    public EpisodeIdentifier(String episodeId){
+        this.episodeId = episodeId;
+    }
+}
