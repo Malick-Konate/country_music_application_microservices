@@ -1,0 +1,43 @@
+  app:
+    artist:
+      host: localhost
+      port: 7001
+    user:
+      host: localhost
+      port: 7002
+    podcast:
+      host: localhost
+      port: 7003
+    catalog:
+      host: localhost
+      port: 7004
+
+
+  server:
+    error:
+      include-message: always
+
+
+
+spring:
+  config:
+    activate:
+      on-profile: docker  # --- Database Configuration for Docker Environment ---
+app:
+  artist:
+    host: artist
+    port: 8082
+  user:
+    host: podcast
+    port: 8081
+  podcast:
+    host: podcast
+    port: 8083
+  catalog:
+    host: catalog
+    port: 8084
+
+
+server.port: 8080
+
+spring.datasource.hikari.initializationFailTimeout: 60000

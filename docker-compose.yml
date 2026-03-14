@@ -1,0 +1,244 @@
+services:
+  user:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    hostname: user
+    ports:
+      - "8081:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:mysql://user_mysql/user
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=pwd
+    depends_on:
+      user_mysql:
+        condition: service_healthy
+
+  artist:
+    build:
+      context: ./artist-service
+      dockerfile: Dockerfile
+    hostname: artist
+    ports:
+      - "8082:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:mysql://artist_mysql/artist
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=pwd
+    depends_on:
+      artist_mysql:
+        condition: service_healthy
+
+  podcast:
+    build:
+      context: ./podcast-service
+      dockerfile: Dockerfile
+    hostname: podcast
+    ports:
+      - "8083:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:mysql://podcast_mysql/podcast
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=pwd
+    depends_on:
+      podcast_mysql:
+        condition: service_healthy
+
+  catalog:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    hostname: catalog
+    ports:
+      - "8084:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:mysql://catalog_mysql/catalog
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=pwd
+    depends_on:
+      catalog_mysql:
+        condition: service_healthy
+
+
+  ##############################################
+  ################## msql#######################
+
+  user_mysql:
+    image: mysql:8
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpass
+      - MYSQL_DATABASE=user
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=pwd
+    volumes:
+      - ./data/mysql1:/var/lib/user_mysql
+      - ./data/init.d:/docker-entrypoint-initdb.d
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-uuser",
+          "-ppwd",
+          "-h",
+          "localhost",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  artist_mysql:
+    image: mysql:8
+    ports:
+      - "3308:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpass
+      - MYSQL_DATABASE=artist
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=pwd
+    volumes:
+      - ./data/mysql1:/var/lib/artist_mysql
+      - ./data/init.d:/docker-entrypoint-initdb.d
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-uuser",
+          "-ppwd",
+          "-h",
+          "localhost",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  podcast_mysql:
+    image: mysql:8
+    ports:
+      - "3309:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpass
+      - MYSQL_DATABASE=podcast
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=pwd
+    volumes:
+      - ./data/mysql1:/var/lib/podcast_mysql
+      - ./data/init.d:/docker-entrypoint-initdb.d
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-uuser",
+          "-ppwd",
+          "-h",
+          "localhost",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  catalog_mysql:
+    image: mysql:8
+    ports:
+      - "3310:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpass
+      - MYSQL_DATABASE=catalog
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=pwd
+    volumes:
+      - ./data/mysql1:/var/lib/catalog_mysql
+      - ./data/init.d:/docker-entrypoint-initdb.d
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-uuser",
+          "-ppwd",
+          "-h",
+          "localhost",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  ##############################################
+################## phpmyadmin###################
+  phpmyadmin:
+    image: phpmyadmin:5.2.0
+    container_name: user_servicePHPMYADMIN
+    links:
+      - user_mysql
+    restart: always
+    ports:
+      - 5013:80
+    environment:
+#      - PMA_ARBITRARY=1
+      - PMA_HOST=user_mysql
+
+    depends_on:
+      user_mysql:
+        condition: service_healthy
+
+  phpmyadmin-artist:
+    image: phpmyadmin:5.2.0
+    container_name: artist_servicePHPMYADMIN
+    links:
+      - artist_mysql
+    restart: always
+    ports:
+      - 5014:80
+    environment:
+      #      - PMA_ARBITRARY=1
+      - PMA_HOST=artist_mysql
+
+    depends_on:
+      artist_mysql:
+        condition: service_healthy
+
+
+  phpmyadmin-podcast:
+    image: phpmyadmin:5.2.0
+    container_name: podcast_servicePHPMYADMIN
+    links:
+      - podcast_mysql
+    restart: always
+    ports:
+      - 5015:80
+    environment:
+      #      - PMA_ARBITRARY=1
+      - PMA_HOST=podcast_mysql
+
+    depends_on:
+      podcast_mysql:
+        condition: service_healthy
+
+
+  phpmyadmin-catalog:
+    image: phpmyadmin:5.2.0
+    container_name: catalog_servicePHPMYADMIN
+    links:
+      - catalog_mysql
+    restart: always
+    ports:
+      - 5016:80
+    environment:
+      #      - PMA_ARBITRARY=1
+      - PMA_HOST=catalog_mysql
+
+    depends_on:
+      catalog_mysql:
+        condition: service_healthy

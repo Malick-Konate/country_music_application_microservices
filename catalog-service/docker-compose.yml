@@ -1,0 +1,59 @@
+services:
+  catalog:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    hostname: catalog
+    ports:
+      - "8084:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:mysql://catalog_mysql/catalog
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=pwd
+    depends_on:
+      catalog_mysql:
+        condition: service_healthy
+
+  catalog_mysql:
+    image: mysql:8
+    ports:
+      - "3310:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpass
+      - MYSQL_DATABASE=catalog
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=pwd
+    volumes:
+      - ./data/mysql1:/var/lib/catalog_mysql
+      - ./data/init.d:/docker-entrypoint-initdb.d
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-uuser",
+          "-ppwd",
+          "-h",
+          "localhost",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  phpmyadmin:
+    image: phpmyadmin:5.2.0
+    container_name: catalog_servicePHPMYADMIN
+    links:
+      - catalog_mysql
+    restart: always
+    ports:
+      - 5016:80
+    environment:
+#      - PMA_ARBITRARY=1
+      - PMA_HOST=catalog_mysql
+
+    depends_on:
+      catalog_mysql:
+        condition: service_healthy

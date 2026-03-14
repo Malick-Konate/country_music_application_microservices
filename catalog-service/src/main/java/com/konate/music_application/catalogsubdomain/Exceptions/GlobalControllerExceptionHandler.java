@@ -1,0 +1,88 @@
+package com.konate.music_application.catalogsubdomain.Exceptions;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
+
+import static org.springframework.http.HttpStatus.*;
+
+
+@RestControllerAdvice
+public class GlobalControllerExceptionHandler {
+
+    @ResponseStatus(NOT_FOUND)
+    @ExceptionHandler(NotFoundException.class)
+    public HttpErrorInfo handleNotFoundException(WebRequest request, Exception ex) {
+        return createHttpErrorInfo(NOT_FOUND, request, ex);
+    }
+
+    @ResponseStatus(NOT_FOUND)
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public HttpErrorInfo handleResourceNotFoundException(WebRequest request, Exception ex) {
+        return createHttpErrorInfo(NOT_FOUND, request, ex);
+    }
+
+//    @ResponseStatus(CONFLICT)
+//    @ExceptionHandler(UserFound.class)
+//    public HttpErrorInfo handleUserFound(WebRequest request, Exception ex) {
+//        return createHttpErrorInfo(CONFLICT, request, ex);
+//    }
+//
+//    @ResponseStatus(CONFLICT)
+//    @ExceptionHandler(ArtistFound.class)
+//    public HttpErrorInfo handleArtistFound(WebRequest request, Exception ex) {
+//        return createHttpErrorInfo(CONFLICT, request, ex);
+//    }
+
+    @ResponseStatus(UNPROCESSABLE_ENTITY)
+    @ExceptionHandler(InvalidInputException.class)
+    public HttpErrorInfo handleInvalidInputException(WebRequest request, Exception ex) {
+        return createHttpErrorInfo(UNPROCESSABLE_ENTITY, request, ex);
+    }
+
+//    @ResponseStatus(CONFLICT)
+//    @ExceptionHandler(InvalidOrderStateException.class)
+//    public HttpErrorInfo handleInvalidOrderStateException(WebRequest request, Exception ex) {
+//        return createHttpErrorInfo(CONFLICT, request, ex);
+//    }
+//
+//    @ResponseStatus(UNPROCESSABLE_ENTITY)
+//    @ExceptionHandler(InvalidAdTargetException.class)
+//    public HttpErrorInfo handleInvalidAdTargetException(WebRequest request, Exception ex) {
+//        return createHttpErrorInfo(UNPROCESSABLE_ENTITY, request, ex);
+//    }
+
+//    @ResponseStatus(UNPROCESSABLE_ENTITY)
+//    @ExceptionHandler(InvalidCampaignStateException.class)
+//    public HttpErrorInfo handleInvalidCampaignStateException(WebRequest request, Exception ex) {
+//        return createHttpErrorInfo(UNPROCESSABLE_ENTITY, request, ex);
+//    }
+
+    @ResponseStatus(UNPROCESSABLE_ENTITY)
+    @ExceptionHandler(InconsistentAlbumException.class)
+    public HttpErrorInfo handleInconsistentAlbumException(WebRequest request, Exception ex) {
+        return createHttpErrorInfo(UNPROCESSABLE_ENTITY, request, ex);
+    }
+
+//    @ResponseStatus(UNPROCESSABLE_ENTITY)
+//    @ExceptionHandler(InconsistentPodcastException.class)
+//    public HttpErrorInfo handleInconsistentPodcastException(WebRequest request, Exception ex) {
+//        return createHttpErrorInfo(UNPROCESSABLE_ENTITY, request, ex);
+//    }
+//
+//    @ResponseStatus(CONFLICT)
+//    @ExceptionHandler(OrderConflictException.class)
+//    public HttpErrorInfo handleOrderConflictException(WebRequest request, Exception ex) {
+//        return createHttpErrorInfo(CONFLICT, request, ex);
+//    }
+
+    private HttpErrorInfo createHttpErrorInfo(HttpStatus httpStatus, WebRequest request, Exception ex) {
+        final String path = request.getDescription(false);
+        final String message = ex.getMessage();
+
+
+        return new HttpErrorInfo(httpStatus, path, message);
+    }
+}

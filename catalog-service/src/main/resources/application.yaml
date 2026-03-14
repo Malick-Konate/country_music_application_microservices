@@ -1,3 +1,25 @@
+app:
+  artist:
+    host: localhost
+    port: 7001
+
+
+
+# Default Spring Profile
+server:
+  error:
+    include-message: always
+
+logging:
+  level:
+    root: INFO
+    com.konate: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+---
+# for docker
+
 spring:
   #  config:
   #    activate:
@@ -5,7 +27,7 @@ spring:
 
 
   datasource:
-    url: jdbc:mysql://user_mysql/user
+    url: jdbc:mysql://catalog_mysql/catalog
     username: user
     password: pwd
 
@@ -22,6 +44,10 @@ spring:
       mode: always
       schema-locations: classpath:schema.sql
       data-locations: classpath:data.sql
+app:
+  artist:
+    host: artist
+    port: 8080
 
 server.port: 8080
 
