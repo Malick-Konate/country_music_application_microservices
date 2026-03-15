@@ -30,25 +30,31 @@ public class UserController {
     @GetMapping()
     public ResponseEntity<List<UserResponseModel>> getAllUsers() {
         List<UserResponseModel> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping("/{username}")
     public ResponseEntity<UserResponseModel> getUserByUsername(@PathVariable String username) {
         UserResponseModel user = userService.getUserByUsername(username);
-        return ResponseEntity.ok(user);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PutMapping("/{username}")
     public ResponseEntity<UserResponseModel> updateUser(@PathVariable String username, @RequestBody UserRequestModel userRequestModel) {
         UserResponseModel updatedUser = userService.updateUser(username, userRequestModel);
-        return ResponseEntity.ok(updatedUser);
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
     @DeleteMapping("/{username}")
     public ResponseEntity<Void> deleteUser(@PathVariable String username) {
         userService.deleteUser(username);
-        return ResponseEntity.noContent().build();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserResponseModel> getUserById(@PathVariable String userId) {
+        UserResponseModel user = userService.getUserById(userId);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
 //    @PostMapping("/{username}/roles/{role}")
