@@ -76,7 +76,8 @@ public class CatalogServiceClient {
     public AlbumResponseModel updateAlbum(String albumId, AlbumRequestModel albumRequestModel) {
         try {
             String url = CATALOG_SERVICE_URL + "/update/" + albumId;
-            return restTemplate.postForObject(url, albumRequestModel, AlbumResponseModel.class);
+            restTemplate.put(url, albumRequestModel, AlbumResponseModel.class);
+            return getAlbum(albumId);
         } catch (HttpClientErrorException ex) {
             throw handleHttpClientException(ex);
         }

@@ -66,8 +66,8 @@ public class ArtistServiceClient {
         try {
             String url = ARTIST_SERVICE_BASE_url + "/" + artistId;
             log.info("Calling Artist Service at {}", url);
-//            return restTemplate.put(url, artist, ArtistModel.class);
-            return restTemplate.patchForObject(url, artist, ArtistModel.class);
+            restTemplate.put(url, artist, ArtistModel.class);
+            return getArtistById(artistId);
         } catch (HttpClientErrorException ex) {
             throw handleHttpClientException(ex);
         }

@@ -73,7 +73,8 @@ public class PodcastServiceClient {
         try {
             String url = Podcast_SERVICE_BASE_url + "/" + podcastId;
             log.info("Calling Podcast Service at {}", url);
-            return restTemplate.patchForObject(url, podcast, PodcastResponseModel.class);
+            restTemplate.put(url, podcast, EpisodeRequestModel.class);
+            return getPodcastById(podcastId);
         } catch (HttpClientErrorException ex) {
             throw handleHttpClientException(ex);
         }
@@ -114,6 +115,7 @@ public class PodcastServiceClient {
         try{
             String url = Podcast_SERVICE_BASE_url + "/" + podcastId + "/episodes/" + episodeId;
             log.info("Calling Podcast Service at {}", url);
+            restTemplate.put(url, episode, EpisodeResponseModel.class);
             return restTemplate.patchForObject(url, episode, EpisodeResponseModel.class);
         } catch (HttpClientErrorException ex) {
             throw handleHttpClientException(ex);

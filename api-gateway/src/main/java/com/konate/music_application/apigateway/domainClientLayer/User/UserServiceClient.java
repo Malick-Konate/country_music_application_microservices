@@ -89,7 +89,8 @@ public class UserServiceClient {
         try{
             String url = USER_SERVICE_BASE_url + "/" + username;
             log.info("Calling User Service at {}", url);
-            return restTemplate.patchForObject(url, requestModel, UserResponseModel.class);
+            restTemplate.put(url, requestModel, UserResponseModel.class);
+            return getUserByUsername(username);
         } catch (HttpClientErrorException ex) {
             throw handleHttpClientException(ex);
         }
