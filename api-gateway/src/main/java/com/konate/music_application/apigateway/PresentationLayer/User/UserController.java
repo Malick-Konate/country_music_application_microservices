@@ -34,7 +34,7 @@ public class UserController {
     }
 
     @GetMapping(
-            value = "/{userId}",
+            value = "/id/{userId}",
             produces = "application/json"
 
     )
