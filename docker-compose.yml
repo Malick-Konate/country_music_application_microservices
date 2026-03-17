@@ -49,7 +49,7 @@ services:
 
   catalog:
     build:
-      context: .
+      context: ./catalog-service
       dockerfile: Dockerfile
     hostname: catalog
     ports:
