@@ -2,6 +2,7 @@ package com.konate.music_application.apigateway.domainClientLayer.Artist;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.konate.music_application.apigateway.Exceptions.HttpErrorInfo;
+import com.konate.music_application.apigateway.Exceptions.InvalidInputException;
 import com.konate.music_application.apigateway.Exceptions.NotFoundException;
 import com.konate.music_application.apigateway.PresentationLayer.Artist.ArtistRequestModel;
 import com.konate.music_application.apigateway.PresentationLayer.Artist.ArtistResponseModel;
@@ -97,7 +98,7 @@ public class ArtistServiceClient {
             return new NotFoundException(getErrorMessage(ex));
         }
         if (ex.getStatusCode() == UNPROCESSABLE_ENTITY) {
-            return new NotFoundException(getErrorMessage(ex));
+            return new InvalidInputException(getErrorMessage(ex));
         }
 
         log.warn("Got an unexpected HTTP error from Artist Service: {}, will rethrow it", ex.getStatusCode());

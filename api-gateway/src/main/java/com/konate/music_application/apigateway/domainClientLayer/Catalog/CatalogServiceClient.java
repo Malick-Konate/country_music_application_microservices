@@ -2,6 +2,7 @@ package com.konate.music_application.apigateway.domainClientLayer.Catalog;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.konate.music_application.apigateway.Exceptions.HttpErrorInfo;
+import com.konate.music_application.apigateway.Exceptions.InconsistentAlbumException;
 import com.konate.music_application.apigateway.Exceptions.NotFoundException;
 import com.konate.music_application.apigateway.PresentationLayer.Catalog.AlbumRequestModel;
 import com.konate.music_application.apigateway.PresentationLayer.Catalog.AlbumResponseModel;
@@ -88,7 +89,7 @@ public class CatalogServiceClient {
             return new NotFoundException(getErrorMessage(ex));
         }
         if (ex.getStatusCode() == UNPROCESSABLE_ENTITY) {
-            return new NotFoundException(getErrorMessage(ex));
+            return new InconsistentAlbumException(getErrorMessage(ex));
         }
 
         log.warn("Got an unexpected HTTP error from Artist Service: {}, will rethrow it", ex.getStatusCode());

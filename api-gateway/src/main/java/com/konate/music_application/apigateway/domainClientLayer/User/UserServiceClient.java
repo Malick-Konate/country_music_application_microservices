@@ -2,7 +2,9 @@ package com.konate.music_application.apigateway.domainClientLayer.User;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.konate.music_application.apigateway.Exceptions.HttpErrorInfo;
+import com.konate.music_application.apigateway.Exceptions.InvalidInputException;
 import com.konate.music_application.apigateway.Exceptions.NotFoundException;
+import com.konate.music_application.apigateway.Exceptions.UserFound;
 import com.konate.music_application.apigateway.PresentationLayer.User.UserRequestModel;
 import com.konate.music_application.apigateway.PresentationLayer.User.UserResponseModel;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +17,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
+import static org.springframework.http.HttpStatus.*;
 
 @Component
 @Slf4j
@@ -119,7 +120,10 @@ public class UserServiceClient {
             return new NotFoundException(getErrorMessage(ex));
         }
         if (ex.getStatusCode() == UNPROCESSABLE_ENTITY) {
-            return new NotFoundException(getErrorMessage(ex));
+            return new InvalidInputException(getErrorMessage(ex));
+        }
+        if (ex.getStatusCode() == CONFLICT) {
+            return new UserFound(getErrorMessage(ex));
         }
 
         log.warn("Got an unexpected HTTP error from User Service: {}, will rethrow it", ex.getStatusCode());

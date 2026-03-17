@@ -6,8 +6,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
+import static org.springframework.http.HttpStatus.*;
 
 
 @RestControllerAdvice
@@ -18,12 +17,24 @@ public class GlobalControllerExceptionHandler {
     public HttpErrorInfo handleNotFoundException(WebRequest request, Exception ex) {
         return createHttpErrorInfo(NOT_FOUND, request, ex);
     }
+
     @ResponseStatus(NOT_FOUND)
     @ExceptionHandler(ResourceNotFoundException.class)
     public HttpErrorInfo handleResourceNotFoundException(WebRequest request, Exception ex) {
         return createHttpErrorInfo(NOT_FOUND, request, ex);
     }
 
+    @ResponseStatus(CONFLICT)
+    @ExceptionHandler(UserFound.class)
+    public HttpErrorInfo handleUserFound(WebRequest request, Exception ex) {
+        return createHttpErrorInfo(CONFLICT, request, ex);
+    }
+
+    @ResponseStatus(CONFLICT)
+    @ExceptionHandler(ArtistFound.class)
+    public HttpErrorInfo handleArtistFound(WebRequest request, Exception ex) {
+        return createHttpErrorInfo(CONFLICT, request, ex);
+    }
 
     @ResponseStatus(UNPROCESSABLE_ENTITY)
     @ExceptionHandler(InvalidInputException.class)
@@ -31,13 +42,41 @@ public class GlobalControllerExceptionHandler {
         return createHttpErrorInfo(UNPROCESSABLE_ENTITY, request, ex);
     }
 
+//    @ResponseStatus(CONFLICT)
+//    @ExceptionHandler(InvalidOrderStateException.class)
+//    public HttpErrorInfo handleInvalidOrderStateException(WebRequest request, Exception ex) {
+//        return createHttpErrorInfo(CONFLICT, request, ex);
+//    }
+
     @ResponseStatus(UNPROCESSABLE_ENTITY)
-    @ExceptionHandler(DuplicateVinException.class)
-    public HttpErrorInfo handleDuplicateVinException(WebRequest request, Exception ex) {
+    @ExceptionHandler(InvalidAdTargetException.class)
+    public HttpErrorInfo handleInvalidAdTargetException(WebRequest request, Exception ex) {
         return createHttpErrorInfo(UNPROCESSABLE_ENTITY, request, ex);
     }
 
+    @ResponseStatus(UNPROCESSABLE_ENTITY)
+    @ExceptionHandler(InvalidCampaignStateException.class)
+    public HttpErrorInfo handleInvalidCampaignStateException(WebRequest request, Exception ex) {
+        return createHttpErrorInfo(UNPROCESSABLE_ENTITY, request, ex);
+    }
 
+    @ResponseStatus(UNPROCESSABLE_ENTITY)
+    @ExceptionHandler(InconsistentAlbumException.class)
+    public HttpErrorInfo handleInconsistentAlbumException(WebRequest request, Exception ex) {
+        return createHttpErrorInfo(UNPROCESSABLE_ENTITY, request, ex);
+    }
+
+    @ResponseStatus(UNPROCESSABLE_ENTITY)
+    @ExceptionHandler(InconsistentPodcastException.class)
+    public HttpErrorInfo handleInconsistentPodcastException(WebRequest request, Exception ex) {
+        return createHttpErrorInfo(UNPROCESSABLE_ENTITY, request, ex);
+    }
+
+    @ResponseStatus(CONFLICT)
+    @ExceptionHandler(OrderConflictException.class)
+    public HttpErrorInfo handleOrderConflictException(WebRequest request, Exception ex) {
+        return createHttpErrorInfo(CONFLICT, request, ex);
+    }
 
     private HttpErrorInfo createHttpErrorInfo(HttpStatus httpStatus, WebRequest request, Exception ex) {
         final String path = request.getDescription(false);

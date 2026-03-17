@@ -2,6 +2,7 @@ package com.konate.music_application.apigateway.domainClientLayer.Podcast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.konate.music_application.apigateway.Exceptions.HttpErrorInfo;
+import com.konate.music_application.apigateway.Exceptions.InconsistentPodcastException;
 import com.konate.music_application.apigateway.Exceptions.NotFoundException;
 import com.konate.music_application.apigateway.PresentationLayer.Podcast.Episode.EpisodeRequestModel;
 import com.konate.music_application.apigateway.PresentationLayer.Podcast.Episode.EpisodeResponseModel;
@@ -157,10 +158,10 @@ public class PodcastServiceClient {
             return new NotFoundException(getErrorMessage(ex));
         }
         if (ex.getStatusCode() == UNPROCESSABLE_ENTITY) {
-            return new NotFoundException(getErrorMessage(ex));
+            return new InconsistentPodcastException(getErrorMessage(ex));
         }
 
-        log.warn("Got an unexpected HTTP error from Artist Service: {}, will rethrow it", ex.getStatusCode());
+        log.warn("Got an unexpected HTTP error from Podcast Service: {}, will rethrow it", ex.getStatusCode());
         log.warn("Error body: {}", ex.getResponseBodyAsString());
         return ex;
     }
