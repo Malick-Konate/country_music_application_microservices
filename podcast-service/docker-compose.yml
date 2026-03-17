@@ -25,7 +25,7 @@ services:
       - MYSQL_USER=user
       - MYSQL_PASSWORD=pwd
     volumes:
-      - ./data/mysql1:/var/lib/podcast_mysql
+      - ./data/mysql-podcast:/var/lib/podcast_mysql
       - ./data/init.d:/docker-entrypoint-initdb.d
     healthcheck:
       test:
