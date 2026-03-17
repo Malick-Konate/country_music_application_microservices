@@ -37,7 +37,7 @@ public class PodcastController {
             consumes = "application/json",
             produces = "application/json"
     )
-    public ResponseEntity<PodcastResponseModel> createPodcast(PodcastRequestModel requestModel) {
+    public ResponseEntity<PodcastResponseModel> createPodcast(@RequestBody PodcastRequestModel requestModel) {
         return new ResponseEntity<>(podcastService.createPodcast(requestModel), HttpStatus.CREATED);
     }
 
@@ -54,7 +54,7 @@ public class PodcastController {
             consumes = "application/json",
             produces = "application/json"
     )
-    public ResponseEntity<PodcastResponseModel> updatePodcast(@PathVariable String podcastId, PodcastRequestModel requestModel) {
+    public ResponseEntity<PodcastResponseModel> updatePodcast(@PathVariable String podcastId, @RequestBody PodcastRequestModel requestModel) {
         return new ResponseEntity<>(podcastService.updatePodcast(podcastId, requestModel), HttpStatus.OK);
     }
 
@@ -89,7 +89,7 @@ public class PodcastController {
             consumes = "application/json",
             produces = "application/json"
     )
-    public ResponseEntity<EpisodeResponseModel> updateEpisode(@PathVariable String podcastId, @PathVariable String episodeId, EpisodeRequestModel requestModel) {
+    public ResponseEntity<EpisodeResponseModel> updateEpisode(@PathVariable String podcastId, @PathVariable String episodeId, @RequestBody EpisodeRequestModel requestModel) {
         return new ResponseEntity<>(episodeService.updateEpisode(podcastId, episodeId, requestModel), HttpStatus.OK);
     }
 
@@ -98,7 +98,7 @@ public class PodcastController {
             consumes = "application/json",
             produces = "application/json"
     )
-    public ResponseEntity<EpisodeResponseModel> createEpisode(@PathVariable String podcastId, EpisodeRequestModel requestModel) {
+    public ResponseEntity<EpisodeResponseModel> createEpisode(@PathVariable String podcastId, @RequestBody EpisodeRequestModel requestModel) {
         return new ResponseEntity<>(episodeService.createEpisode(podcastId, requestModel), HttpStatus.CREATED);
     }
 
