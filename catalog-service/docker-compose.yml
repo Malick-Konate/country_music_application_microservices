@@ -25,7 +25,7 @@ services:
       - MYSQL_USER=user
       - MYSQL_PASSWORD=pwd
     volumes:
-      - ./data/mysql-catalog:/var/lib/catalog_mysql
+      - ./data/mysql-catalog:/var/lib/mysql
       - ./data/init.d:/docker-entrypoint-initdb.d
     healthcheck:
       test:

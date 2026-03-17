@@ -1,43 +1,44 @@
-  app:
-    artist:
-      host: localhost
-      port: 7001
-    user:
-      host: localhost
-      port: 7002
-    podcast:
-      host: localhost
-      port: 7003
-    catalog:
-      host: localhost
-      port: 7004
+# Default Configuration (No indentation for root keys)
+app:
+  artist:
+    host: localhost
+    port: 7001
+  user:
+    host: localhost
+    port: 7002
+  podcast:
+    host: localhost
+    port: 7003
+  catalog:
+    host: localhost
+    port: 7004
 
+server:
+  port: 8080
+  error:
+    include-message: always
 
-  server:
-    error:
-      include-message: always
-
-
-
+---
+# Docker Profile Configuration
 spring:
   config:
     activate:
-      on-profile: docker  # --- Database Configuration for Docker Environment ---
+      on-profile: docker
+
+  datasource:
+    hikari:
+      initializationFailTimeout: 60000
+
 app:
   artist:
     host: artist
-    port: 8082
+    port: 8080 # Port inside the container network
   user:
-    host: podcast
-    port: 8081
+    host: user # Corrected from 'podcast'
+    port: 8080
   podcast:
     host: podcast
-    port: 8083
+    port: 8080
   catalog:
     host: catalog
-    port: 8084
-
-
-server.port: 8080
-
-spring.datasource.hikari.initializationFailTimeout: 60000
+    port: 8080
