@@ -32,9 +32,9 @@ spring:
 app:
   artist:
     host: artist
-    port: 8080 # Port inside the container network
+    port: 8080
   user:
-    host: user # Corrected from 'podcast'
+    host: user
     port: 8080
   podcast:
     host: podcast

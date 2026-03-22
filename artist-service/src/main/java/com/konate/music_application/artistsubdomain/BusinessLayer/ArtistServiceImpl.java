@@ -72,6 +72,8 @@ public class ArtistServiceImpl implements ArtistService {
     public ArtistResponseModel updateArtist(String id, ArtistRequestModel artist) {
         Artist artistExisting = artistRepository.findAllByArtistIdentifier_ArtistId(id);
 
+        if (artistExisting == null)
+            throw new NotFoundException("Artist not found with id: " + id);
         if (artist == null) {
             throw new IllegalArgumentException("Artist cannot be null");
         }
