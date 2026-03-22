@@ -2,6 +2,7 @@ package com.konate.music_application.artistsubdomain.DataLayer;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,10 +13,11 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Artist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Id;
+    private Integer id;
     @Embedded
     private ArtistIdentifier artistIdentifier;
     @Column(name = "first_name")
@@ -42,6 +44,7 @@ public class Artist {
 
     @Embedded
     private ArtistBio biography;
+
 
 
 }
