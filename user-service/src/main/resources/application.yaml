@@ -5,20 +5,30 @@ spring:
 
 
   datasource:
-    url: jdbc:mysql://user_mysql/user
+    url: jdbc:postgresql://user_postgres/user
     username: user
     password: pwd
 
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: none   #use create to allow jpa to auto-generate from Entity classes; use none to use schema-h2.sql
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
 
-    defer-datasource-initialization: true
+
+  #  jpa:
+#    show-sql: true
+#    hibernate:
+#      ddl-auto: none   #use create to allow jpa to auto-generate from Entity classes; use none to use schema-h2.sql
+#
+#    defer-datasource-initialization: true
 
   sql:
     init:
-      platform: mysql
+      platform: postgresql
       mode: always
       schema-locations: classpath:schema.sql
       data-locations: classpath:data.sql
