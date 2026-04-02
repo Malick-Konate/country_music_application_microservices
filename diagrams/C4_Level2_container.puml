@@ -1,9 +1,5 @@
 @startuml C4_Music_System_v2
-!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
-
-!define PERSON_BG_COLOR #08427b
-!define CONTAINER_BG_COLOR #1168bd
-!define CONTAINER_DB_BG_COLOR #518fca
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
 
 ' Custom tags for visual clarity
 AddRelTag("sync", $lineColor = "#0000FF", $textColor = "#0000FF")
@@ -14,14 +10,15 @@ Person(user, "User / Advertiser", "Listeners streaming music/podcasts or Artists
 System_Boundary(musicSystem, "Music Application Context") {
 
     ' --- Frontend Layer ---
-    Container(spa, "Single Page Application", "React", "Interface for listening and managing orders/ads.")
+    Container(spa, "Single Page Application", "React", "Web interface for listening and managing orders/ads.")
+    Container(mobileApp, "Mobile App", "React Native", "Mobile interface for streaming music and podcasts.")
     Container(apiGateway, "API Gateway", "Spring Cloud Gateway", "Unified entry point; handles Auth & Routing.")
 
     ' --- Aggregator / Aggregate Root Services ---
     Container(orderService, "Order Service", "Spring Boot", "Orchestrates purchases: Albums, Podcast Subs, Artist Donations.")
     Container(adService, "Ad Service", "Spring Boot", "Manages AdCampaigns, Creatives, and Targeting logic.")
 
-    ' --- Core Domain Services (LLMS) ---
+    ' --- Core Domain Services ---
     Container(userService, "User Service", "Spring Boot", "User profiles, preferences, and identity.")
     Container(artistService, "Artist Service", "Spring Boot", "Artist bios, genres, and management.")
     Container(catalogService, "Catalog Service", "Spring Boot", "Music library: Albums and Songs.")
@@ -36,24 +33,30 @@ System_Boundary(musicSystem, "Music Application Context") {
     ContainerDb(podcastDb, "Podcast DB", "PostgreSQL", "Podcast metadata.")
 }
 
+' --- External Systems ---
+System_Ext(paymentGateway, "Payment Gateway", "Processes payments (e.g., Stripe/PayPal).")
+
 ' --- Relationships ---
 
 ' Frontend Flow
 Rel(user, spa, "Uses", "HTTPS")
+Rel(user, mobileApp, "Uses", "HTTPS")
 Rel(spa, apiGateway, "API Requests", "JSON/REST", $tags="sync")
+Rel(mobileApp, apiGateway, "API Requests", "JSON/REST", $tags="sync")
 
 ' Gateway Routing
 Rel(apiGateway, orderService, "Purchases", "REST")
 Rel(apiGateway, adService, "Ad Management/Serving", "REST")
 Rel(apiGateway, catalogService, "Streaming/Browsing", "REST")
 
-' Order Service Orchestration (Aggregator 1)
+' Order Service interactions
+Rel(orderService, paymentGateway, "Sends payment details", "JSON/HTTPS")
 Rel(orderService, userService, "Verify User", "REST", $tags="aggregator")
 Rel(orderService, catalogService, "Verify Album", "REST", $tags="aggregator")
 Rel(orderService, podcastService, "Verify Podcast", "REST", $tags="aggregator")
 Rel(orderService, artistService, "Verify Artist", "REST", $tags="aggregator")
 
-' Ad Service Orchestration (Aggregator 2)
+' Ad Service interactions
 Rel(adService, userService, "Targeting Lookup", "REST", $tags="aggregator")
 Rel(adService, artistService, "Sponsor Lookup", "REST", $tags="aggregator")
 Rel(adService, podcastService, "Placement Lookup", "REST", $tags="aggregator")
