@@ -1,7 +1,7 @@
 @startuml C4_Level1_context
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
 
-title System Context Diagram for Music Management System [cite: 8]
+title System Context Diagram for Music Management System
 
 ' Actors (Users) [cite: 47]
 Person(user, "Music Listener / Artist", "A person who streams music/podcasts or manages an artist profile.")
