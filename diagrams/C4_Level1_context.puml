@@ -1,0 +1,21 @@
+@startuml C4_Level1_context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title System Context Diagram for Music Management System [cite: 8]
+
+' Actors (Users) [cite: 47]
+Person(user, "Music Listener / Artist", "A person who streams music/podcasts or manages an artist profile.")
+Person(advertiser, "Advertiser", "A person or brand that creates and manages advertising campaigns.")
+
+' Your System [cite: 48]
+System(music_system, "Music Management System", "Allows users to browse music, manage talent, and handle orders or ad placements.")
+
+' External Systems [cite: 49]
+System_Ext(payment, "Payment Gateway", "External system (e.g., Stripe, PayPal) that processes payments.")
+
+' Relationships [cite: 51]
+Rel(user, music_system, "Uses to stream music and manage profiles")
+Rel(advertiser, music_system, "Creates and monitors ad campaigns")
+Rel(music_system, payment, "Sends payment details for processing")
+
+@enduml

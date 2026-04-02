@@ -1,0 +1,69 @@
+@startuml C4_Music_System_v2
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+!define PERSON_BG_COLOR #08427b
+!define CONTAINER_BG_COLOR #1168bd
+!define CONTAINER_DB_BG_COLOR #518fca
+
+' Custom tags for visual clarity
+AddRelTag("sync", $lineColor = "#0000FF", $textColor = "#0000FF")
+AddRelTag("aggregator", $lineColor = "#cc0099", $textColor = "#cc0099", $lineStyle = DashedLine())
+
+Person(user, "User / Advertiser", "Listeners streaming music/podcasts or Artists/Brands managing Ad Campaigns.")
+
+System_Boundary(musicSystem, "Music Application Context") {
+
+    ' --- Frontend Layer ---
+    Container(spa, "Single Page Application", "React", "Interface for listening and managing orders/ads.")
+    Container(apiGateway, "API Gateway", "Spring Cloud Gateway", "Unified entry point; handles Auth & Routing.")
+
+    ' --- Aggregator / Aggregate Root Services ---
+    Container(orderService, "Order Service", "Spring Boot", "Orchestrates purchases: Albums, Podcast Subs, Artist Donations.")
+    Container(adService, "Ad Service", "Spring Boot", "Manages AdCampaigns, Creatives, and Targeting logic.")
+
+    ' --- Core Domain Services (LLMS) ---
+    Container(userService, "User Service", "Spring Boot", "User profiles, preferences, and identity.")
+    Container(artistService, "Artist Service", "Spring Boot", "Artist bios, genres, and management.")
+    Container(catalogService, "Catalog Service", "Spring Boot", "Music library: Albums and Songs.")
+    Container(podcastService, "Podcast Service", "Spring Boot", "Podcast series and Episode management.")
+
+    ' --- Data Layer ---
+    ContainerDb(orderDb, "Order DB", "MongoDB", "Transactions & Order History.")
+    ContainerDb(adDb, "Ad DB", "PostgreSQL", "Campaigns, Targeting Rules, & Creatives.")
+    ContainerDb(userDb, "User DB", "PostgreSQL", "User data.")
+    ContainerDb(artistDb, "Artist DB", "MySQL", "Artist metadata.")
+    ContainerDb(catalogDb, "Catalog DB", "PostgreSQL", "Music metadata.")
+    ContainerDb(podcastDb, "Podcast DB", "PostgreSQL", "Podcast metadata.")
+}
+
+' --- Relationships ---
+
+' Frontend Flow
+Rel(user, spa, "Uses", "HTTPS")
+Rel(spa, apiGateway, "API Requests", "JSON/REST", $tags="sync")
+
+' Gateway Routing
+Rel(apiGateway, orderService, "Purchases", "REST")
+Rel(apiGateway, adService, "Ad Management/Serving", "REST")
+Rel(apiGateway, catalogService, "Streaming/Browsing", "REST")
+
+' Order Service Orchestration (Aggregator 1)
+Rel(orderService, userService, "Verify User", "REST", $tags="aggregator")
+Rel(orderService, catalogService, "Verify Album", "REST", $tags="aggregator")
+Rel(orderService, podcastService, "Verify Podcast", "REST", $tags="aggregator")
+Rel(orderService, artistService, "Verify Artist", "REST", $tags="aggregator")
+
+' Ad Service Orchestration (Aggregator 2)
+Rel(adService, userService, "Targeting Lookup", "REST", $tags="aggregator")
+Rel(adService, artistService, "Sponsor Lookup", "REST", $tags="aggregator")
+Rel(adService, podcastService, "Placement Lookup", "REST", $tags="aggregator")
+
+' Database Persistence
+Rel_D(orderService, orderDb, "Reads/Writes")
+Rel_D(adService, adDb, "Reads/Writes")
+Rel_D(userService, userDb, "Reads/Writes")
+Rel_D(artistService, artistDb, "Reads/Writes")
+Rel_D(catalogService, catalogDb, "Reads/Writes")
+Rel_D(podcastService, podcastDb, "Reads/Writes")
+
+@enduml
