@@ -17,10 +17,10 @@ public class ArtistServiceImpl implements ArtistService {
     private final ArtistResponseMapper artistResponseMapper;
     private final ArtistRequestMapper artistRequestMapper;
 
-    public ArtistServiceImpl(ArtistRepository artistRepository, ArtistResponseMapper artistResponseMapper, ArtistResponseMapper artistResponseMapper1, ArtistRequestMapper artistRequestMapper) {
+    public ArtistServiceImpl(ArtistRepository artistRepository, ArtistRequestMapper requestMapper, ArtistResponseMapper responseMapper) {
         this.artistRepository = artistRepository;
-        this.artistResponseMapper = artistResponseMapper1;
-        this.artistRequestMapper = artistRequestMapper;
+        this.artistResponseMapper = responseMapper;
+        this.artistRequestMapper = requestMapper;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class ArtistServiceImpl implements ArtistService {
     @Override
     public ArtistResponseModel createArtist(ArtistRequestModel artist) {
         if (artist == null) {
-            throw new IllegalArgumentException("Artist cannot be null");
+            throw new IllegalArgumentException("Invalid input: Artist request model cannot be null");
         }
         Artist compare = artistRepository.findAllByLastName(artist.getLastName());
         if (compare != null) {
