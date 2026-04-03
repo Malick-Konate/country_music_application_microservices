@@ -157,4 +157,44 @@ public class ArtistServiceImplExceptionTest {
         // Act & Assert
         assertThrows(NotFoundException.class, () -> service.deleteArtist(artistId));
     }
+
+    @Test
+    void whenLastNameExists_getArtistByLastName_shouldReturnArtist() {
+        // Arrange
+        String lastName = "Jennings";
+        Artist artist = new Artist();
+        artist.setLastName(lastName);
+
+        ArtistResponseModel responseModel = new ArtistResponseModel();
+        responseModel.setLastName(lastName);
+
+        // Mock the repository to return the artist and the mapper to return the response model
+        when(artistRepository.findAllByLastName(lastName)).thenReturn(artist);
+        when(responseMapper.toRespondModel(artist)).thenReturn(responseModel);
+
+        // Act
+        ArtistResponseModel result = service.getArtistByLastName(lastName);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(lastName, result.getLastName());
+        verify(artistRepository, times(1)).findAllByLastName(lastName);
+    }
+
+    @Test
+    void whenLastNameDoesNotExist_getArtistByLastName_thenThrowNotFoundException() {
+        // Arrange
+        String lastName = "Unknown";
+
+        // Mock the repository to return null for a name that doesn't exist
+        when(artistRepository.findAllByLastName(lastName)).thenReturn(null);
+
+        // Act & Assert
+        NotFoundException exception = assertThrows(NotFoundException.class, () ->
+                service.getArtistByLastName(lastName)
+        );
+
+        // Verifying the specific error message defined in your implementation
+        assertEquals("Artist not found with id: " + lastName, exception.getMessage());
+    }
 }
