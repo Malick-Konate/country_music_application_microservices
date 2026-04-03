@@ -128,6 +128,23 @@ public class ArtistControllerIntegrationTest {
                 .expectStatus().isNotFound();
     }
 
+    @Test
+    void whenCreateArtistWithInvalidBody_thenBadRequest() {
+        webTestClient.post()
+                .uri(BASE_URI)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue("")
+                .exchange()
+                .expectStatus().is4xxClientError();
+    }
+    @Test
+    void whenDeleteInvalidArtist_thenNotFound() {
+        webTestClient.delete()
+                .uri(BASE_URI + "/invalid-id")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
 
     private ArtistRequestModel buildSampleArtist() {
         return ArtistRequestModel.builder()

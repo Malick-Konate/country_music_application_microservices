@@ -92,23 +92,23 @@ public class ArtistRepositoryTest {
         assertEquals(2, savedArtist.getSocialMediaLinks().size(), "Should persist exactly 2 social media links");
     }
 
-//    @Test
-//    public void whenArtistUpdated_thenSaveAndReturnUpdatedData() {
-//        // Arrange
-//        Artist artist = buildSampleArtist();
-//        Artist savedArtist = artistRepository.save(artist);
-//
-//        // Act
-//        savedArtist.setFirstName("Waylon");
-//        savedArtist.setLastName("Jennings");
-//        Artist updatedArtist = artistRepository.save(savedArtist);
-//
-//        // Assert
-//        assertNotNull(updatedArtist);
-//        assertEquals("Waylon", updatedArtist.getFirstName());
-//        assertEquals("Jennings", updatedArtist.getLastName());
-//        assertEquals(savedArtist.getArtistIdentifier().getArtistId(), updatedArtist.getArtistIdentifier().getArtistId(), "Artist ID should remain the same after an update");
-//    }
+    @Test
+    public void whenArtistUpdated_thenSaveAndReturnUpdatedData() {
+        // Arrange
+        Artist artist = buildSampleArtist();
+        Artist savedArtist = artistRepository.save(artist);
+
+        // Act
+        savedArtist.setFirstName("Waylon");
+        savedArtist.setLastName("Jennings");
+        Artist updatedArtist = artistRepository.save(savedArtist);
+
+        // Assert
+        assertNotNull(updatedArtist);
+        assertEquals("Waylon", updatedArtist.getFirstName());
+        assertEquals("Jennings", updatedArtist.getLastName());
+        assertEquals(savedArtist.getArtistIdentifier().getArtistId(), updatedArtist.getArtistIdentifier().getArtistId(), "Artist ID should remain the same after an update");
+    }
 
     @Test
     public void whenArtistDeleted_thenCannotBeFound() {
@@ -148,13 +148,13 @@ public class ArtistRepositoryTest {
                 .firstName("Firstname")
                 .lastName("Lastname")
                 .biography(new ArtistBio("this is the biography"))
-                .socialMediaLinks(List.of(
+                .socialMediaLinks(new ArrayList<>(List.of(
                         new SocialMediaLink("Instagram", "URI"),
                         new SocialMediaLink("Facebook", "URI")
-                ))
+                )))
                 .genres(new ArrayList<>(List.of(
                         new Genre("classic Country"),
                         new Genre("outlaw country")
-                ))).build();
-    }
-}
+                )))
+                .build();
+    }}
