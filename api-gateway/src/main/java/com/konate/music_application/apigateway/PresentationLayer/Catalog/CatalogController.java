@@ -22,6 +22,7 @@ public class CatalogController {
             produces = "application/json"
     )
     public ResponseEntity<List<AlbumResponseModel>> getAllAlbums() {
+        log.info("Getting all albums");
         return new ResponseEntity<>(albumService.getAllAlbums(), HttpStatus.OK);
     }
 
@@ -30,6 +31,7 @@ public class CatalogController {
             produces = "application/json"
     )
     public ResponseEntity<AlbumResponseModel> getAlbumById(@PathVariable String albumId) {
+        log.info("Getting album by ID: {}", albumId);
         return new ResponseEntity<>(albumService.getAlbumById(albumId), HttpStatus.OK);
     }
 
@@ -39,6 +41,7 @@ public class CatalogController {
             produces = "application/json"
     )
     public ResponseEntity<AlbumResponseModel> createAlbum(@RequestBody AlbumRequestModel album) {
+        log.info("Creating album: {}", album);
         return new ResponseEntity<>(albumService.createAlbum(album), HttpStatus.CREATED);
     }
 
@@ -48,6 +51,7 @@ public class CatalogController {
             produces = "application/json"
     )
     public ResponseEntity<AlbumResponseModel> updateAlbum(@PathVariable String albumId, @RequestBody AlbumRequestModel album) {
+        log.info("Updating album by ID: {}", albumId);
         return new ResponseEntity<>(albumService.updateAlbum(albumId, album), HttpStatus.OK);
     }
 
@@ -57,6 +61,7 @@ public class CatalogController {
     )
     public ResponseEntity<Void> deleteAlbum(@PathVariable String albumId) {
         albumService.deleteAlbum(albumId);
+        log.info("Deleting album by ID: {}", albumId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

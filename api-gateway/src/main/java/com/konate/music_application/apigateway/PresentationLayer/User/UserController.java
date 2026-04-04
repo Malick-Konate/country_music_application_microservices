@@ -22,6 +22,7 @@ public class UserController {
             produces = "application/json"
     )
     public ResponseEntity<List<UserResponseModel>> getAllUsers() {
+        log.info("Getting all users");
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
@@ -30,6 +31,7 @@ public class UserController {
             produces = "application/json"
     )
     public ResponseEntity<UserResponseModel> createUser(@RequestBody UserRequestModel user) {
+        log.info("Creating user: {}", user);
         return new ResponseEntity<>(userService.registerUser(user), HttpStatus.CREATED);
     }
 
@@ -39,6 +41,7 @@ public class UserController {
 
     )
     public ResponseEntity<UserResponseModel> getUser(@PathVariable String userId) {
+        log.info("Getting user by ID: {}", userId);
         return new ResponseEntity<>(userService.getUserById(userId), HttpStatus.OK);
     }
 
@@ -47,6 +50,7 @@ public class UserController {
             produces = "application/json"
     )
     public ResponseEntity<UserResponseModel> getUserByUsername(@PathVariable String username) {
+        log.info("Getting user by username: {}", username);
         return new ResponseEntity<>(userService.getUserByUsername(username), HttpStatus.OK);
     }
 
@@ -56,6 +60,7 @@ public class UserController {
             produces = "application/json"
     )
     public ResponseEntity<UserResponseModel> updateUser(@PathVariable String username, @RequestBody UserRequestModel user) {
+        log.info("Updating user by username: {}", username);
         return new ResponseEntity<>(userService.updateUser(username, user), HttpStatus.OK);
     }
 
@@ -65,6 +70,7 @@ public class UserController {
     )
     public ResponseEntity<Void> deleteUser(@PathVariable String username) {
         userService.deleteUser(username);
+        log.info("Deleting user by username: {}", username);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

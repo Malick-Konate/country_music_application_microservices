@@ -30,6 +30,7 @@ public class PodcastController {
             produces = "application/json"
     )
     public ResponseEntity<List<PodcastResponseModel>> getAllPodcasts() {
+        log.info("Getting all podcasts");
         return new ResponseEntity<>(podcastService.getAllPodcast(), HttpStatus.OK);
     }
 
@@ -38,6 +39,7 @@ public class PodcastController {
             produces = "application/json"
     )
     public ResponseEntity<PodcastResponseModel> createPodcast(@RequestBody PodcastRequestModel requestModel) {
+        log.info("Creating podcast: {}", requestModel);
         return new ResponseEntity<>(podcastService.createPodcast(requestModel), HttpStatus.CREATED);
     }
 
@@ -46,6 +48,7 @@ public class PodcastController {
             produces = "application/json"
     )
     public ResponseEntity<PodcastResponseModel> getPodcastById(@PathVariable String podcastId) {
+        log.info("Getting podcast by ID: {}", podcastId);
         return new ResponseEntity<>(podcastService.getPodcastById(podcastId), HttpStatus.OK);
     }
 
@@ -55,6 +58,7 @@ public class PodcastController {
             produces = "application/json"
     )
     public ResponseEntity<PodcastResponseModel> updatePodcast(@PathVariable String podcastId, @RequestBody PodcastRequestModel requestModel) {
+        log.info("Updating podcast by ID: {}", podcastId);
         return new ResponseEntity<>(podcastService.updatePodcast(podcastId, requestModel), HttpStatus.OK);
     }
 
@@ -64,6 +68,7 @@ public class PodcastController {
     )
     public ResponseEntity<HttpStatus> deletePodcast(@PathVariable String username) {
         podcastService.deletePodcast(username);
+        log.info("Deleting podcast by username: {}", username);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -90,6 +95,7 @@ public class PodcastController {
             produces = "application/json"
     )
     public ResponseEntity<EpisodeResponseModel> updateEpisode(@PathVariable String podcastId, @PathVariable String episodeId, @RequestBody EpisodeRequestModel requestModel) {
+        log.info("Updating episode by ID: {}", episodeId);
         return new ResponseEntity<>(episodeService.updateEpisode(podcastId, episodeId, requestModel), HttpStatus.OK);
     }
 
@@ -99,6 +105,7 @@ public class PodcastController {
             produces = "application/json"
     )
     public ResponseEntity<EpisodeResponseModel> createEpisode(@PathVariable String podcastId, @RequestBody EpisodeRequestModel requestModel) {
+        log.info("Creating episode: {}", requestModel);
         return new ResponseEntity<>(episodeService.createEpisode(podcastId, requestModel), HttpStatus.CREATED);
     }
 
@@ -108,6 +115,7 @@ public class PodcastController {
     )
     public ResponseEntity<HttpStatus> deleteEpisode(@PathVariable String podcastId, @PathVariable String episodeId) {
         episodeService.deleteEpisode(episodeId, podcastId);
+        log.info("Deleting episode by ID: {}", episodeId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
