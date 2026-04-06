@@ -42,4 +42,9 @@ public class AlbumController {
         return new ResponseEntity<>(updatedAlbum, HttpStatus.OK);
     }
 
+    @GetMapping("/title/{title}")
+    public ResponseEntity<AlbumResponseModel> getAlbumByTitle(@PathVariable String title) {
+        return new ResponseEntity<>(albumService.getAlbumByTitle(title), HttpStatus.OK);
+    }
+
 }

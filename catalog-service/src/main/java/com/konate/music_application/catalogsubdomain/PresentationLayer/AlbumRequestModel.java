@@ -3,6 +3,7 @@ package com.konate.music_application.catalogsubdomain.PresentationLayer;
 import com.konate.music_application.catalogsubdomain.DataLayer.AlbumType;
 import com.konate.music_application.catalogsubdomain.DataLayer.Song;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class AlbumRequestModel {
 //    private String albumId;
     private String title;

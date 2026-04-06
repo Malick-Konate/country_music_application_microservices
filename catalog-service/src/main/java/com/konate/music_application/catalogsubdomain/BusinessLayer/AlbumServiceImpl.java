@@ -4,6 +4,7 @@ import com.konate.music_application.catalogsubdomain.DataLayer.Album;
 import com.konate.music_application.catalogsubdomain.DataLayer.AlbumIdentifier;
 import com.konate.music_application.catalogsubdomain.DataLayer.AlbumRepository;
 import com.konate.music_application.catalogsubdomain.DataLayer.Song;
+import com.konate.music_application.catalogsubdomain.Exceptions.InconsistentAlbumException;
 import com.konate.music_application.catalogsubdomain.Exceptions.NotFoundException;
 import com.konate.music_application.catalogsubdomain.MappingLayer.AlbumRequestMapper;
 import com.konate.music_application.catalogsubdomain.MappingLayer.AlbumResponseMapper;
@@ -80,7 +81,7 @@ public class AlbumServiceImpl implements AlbumService {
 
         List<Song> songs = album.getSong();
         if (songs == null || songs.isEmpty()) {
-            throw new IllegalArgumentException("Album must have at least one song");
+            throw new InconsistentAlbumException("Album must have at least one song");
         }
 
         Album albumEntity = albumRequestMapper.toAlbum(
