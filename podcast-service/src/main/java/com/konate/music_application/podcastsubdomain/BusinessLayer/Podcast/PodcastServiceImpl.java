@@ -38,7 +38,7 @@ public class PodcastServiceImpl implements PodcastService {
     public PodcastResponseModel getPodcastById(String podcastId) {
         if (podcastId == null || podcastId.trim().isEmpty())
             throw new InvalidInputException("Sorry, cannot be null.");
-        Podcast podcast = podcastRepository.findAllByPodcastIdentifier_PodcastId(podcastId);
+        Podcast podcast = podcastRepository.findAllByPodcastId(podcastId);
 
         if (podcast == null)
             throw new NotFoundException("Podcast not found with Id: " + podcastId);
@@ -88,7 +88,7 @@ public class PodcastServiceImpl implements PodcastService {
         if (podcastId == null || podcastId.trim().isEmpty() )
             throw new InvalidInputException("Sorry, cannot be null.");
 
-        Podcast podcastExisting = podcastRepository.findAllByPodcastIdentifier_PodcastId(podcastId);
+        Podcast podcastExisting = podcastRepository.findAllByPodcastId(podcastId);
         if (requestModel == null)
             throw new NotFoundException("Podcast request cannot be null");
 
@@ -108,7 +108,7 @@ public class PodcastServiceImpl implements PodcastService {
         if (podcastID == null || podcastID.trim().isEmpty())
             throw new InvalidInputException("Sorry, cannot be null.");
 
-        Podcast podcast = podcastRepository.findAllByPodcastIdentifier_PodcastId(podcastID);
+        Podcast podcast = podcastRepository.findAllByPodcastId(podcastID);
 
         if (podcast == null)
             throw new NotFoundException("Podcast not found with Id: " + podcastID);

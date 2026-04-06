@@ -21,29 +21,29 @@ logging:
 # for docker
 
 spring:
-  #  config:
-  #    activate:
-  #      on-profile: docker
+    config:
+      activate:
+        on-profile: docker
 
 
-  datasource:
-    url: jdbc:mysql://catalog_mysql/catalog
-    username: user
-    password: pwd
+    datasource:
+      url: jdbc:mysql://catalog_mysql/catalog
+      username: user
+      password: pwd
 
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: none   #use create to allow jpa to auto-generate from Entity classes; use none to use schema-h2.sql
+    jpa:
+      show-sql: true
+      hibernate:
+        ddl-auto: none   #use create to allow jpa to auto-generate from Entity classes; use none to use schema-h2.sql
 
-    defer-datasource-initialization: true
+      defer-datasource-initialization: true
 
-  sql:
-    init:
-      platform: mysql
-      mode: always
-      schema-locations: classpath:schema.sql
-      data-locations: classpath:data.sql
+    sql:
+      init:
+        platform: mysql
+        mode: always
+        schema-locations: classpath:schema.sql
+        data-locations: classpath:data.sql
 app:
   artist:
     host: artist

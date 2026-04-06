@@ -14,7 +14,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Mapper(componentModel = "spring")
 public interface PodcastResponseMapper {
     @Mappings({
-            @Mapping(source = "podcastIdentifier.podcastId", target = "podcastId"),
+            @Mapping(source = "podcastId", target = "podcastId"),
             @Mapping(source = "title", target = "title"),
             @Mapping(source = "hostname", target = "hostname"),
             @Mapping(source = "description", target = "description"),
@@ -27,10 +27,10 @@ public interface PodcastResponseMapper {
     @AfterMapping
     default void addLinks(@MappingTarget PodcastResponseModel responseModel, Podcast podcast){
         Link selfLink = linkTo(methodOn(PodcastController.class)
-                .getPodcastById(podcast.getPodcastIdentifier().getPodcastId()))
+                .getPodcastById(podcast.getPodcastId()))
                 .withSelfRel();
         Link allLink = linkTo(methodOn(PodcastController.class).getAllPodcast()).withRel("all podcasts");
-        Link delete = linkTo(methodOn(PodcastController.class).deletePodcast(podcast.getPodcastIdentifier().getPodcastId())).withRel("delete");
+        Link delete = linkTo(methodOn(PodcastController.class).deletePodcast(podcast.getPodcastId())).withRel("delete");
         responseModel.add(selfLink, allLink, delete);
     }
 

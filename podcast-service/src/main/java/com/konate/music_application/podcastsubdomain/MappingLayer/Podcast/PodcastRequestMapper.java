@@ -12,7 +12,8 @@ import org.mapstruct.Mappings;
 public interface PodcastRequestMapper {
     @Mappings({
             @Mapping(target = "id", ignore = true),
-            @Mapping(expression = "java(podcastIdentifier)", target = "podcastIdentifier"),
+//            @Mapping(expression = "java(podcastIdentifier)", target = "podcastIdentifier"),
+            @Mapping(expression = "java(podcastIdentifier.getPodcastId())", target = "podcastId"),
             @Mapping(source = "requestModel.title", target = "title"),
             @Mapping(source = "requestModel.hostname", target = "hostname"),
             @Mapping(source = "requestModel.description", target = "description"),

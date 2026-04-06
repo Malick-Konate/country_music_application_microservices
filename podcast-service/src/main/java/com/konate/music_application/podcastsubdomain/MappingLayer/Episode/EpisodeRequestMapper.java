@@ -16,10 +16,13 @@ import org.mapstruct.Mappings;
 public interface EpisodeRequestMapper {
     @Mappings({
             @Mapping(target = "id", ignore = true),
-            @Mapping(expression = "java(podcastIdentifier)", target = "podcastIdentifier"),
-            @Mapping(expression = "java(episodeIdentifier)", target = "episodeIdentifier"),
+//            @Mapping(expression = "java(podcastIdentifier)", target = "podcastIdentifier"),
+//            @Mapping(expression = "java(episodeIdentifier)", target = "episodeIdentifier"),
+            @Mapping(expression = "java(episodeIdentifier.getEpisodeId())", target = "episodeId"),
+            @Mapping(expression = "java(podcastIdentifier.getPodcastId())", target = "podcastId"),
             @Mapping(source = "requestModel.episodeTitle", target = "episodeTitle"),
-            @Mapping(source = "requestModel.duration", target = "duration"),
+//            @Mapping(source = "requestModel.duration", target = "duration"),
+            @Mapping(expression = "java(requestModel.getDuration().toString())", target = "duration"),
             @Mapping(source = "requestModel.publishDate", target = "publishDate"),
             @Mapping(source = "requestModel.status", target = "status")
     })

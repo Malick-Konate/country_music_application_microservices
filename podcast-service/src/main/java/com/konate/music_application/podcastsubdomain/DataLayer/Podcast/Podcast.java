@@ -1,42 +1,48 @@
 package com.konate.music_application.podcastsubdomain.DataLayer.Podcast;
 
 
-import jakarta.persistence.*;
+//import jakarta.persistence.*;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.antlr.v4.runtime.misc.NotNull;
+//import org.antlr.v4.runtime.misc.NotNull;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-@Entity
-@Table(name = "podcast")
+@Document(collection = "podcasts")
 @Data
 @NoArgsConstructor
 public class Podcast {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Id;
+    private String id;
 
-    @Embedded
+    //    @Embedded
+    @Transient
     private PodcastIdentifier podcastIdentifier;
 
-    @Column(name = "title")
+    @Field(name = "podcastId")
+    private String podcastId;
+
+    @Field(name = "title")
     private String title;
 
-    @Column(name = "hostname")
+    @Field(name = "hostname")
     private String hostname;
 
-    @Column(name = "description")
+    @Field(name = "description")
     private String description;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "pricing_model")
+    //    @Enumerated(EnumType.STRING)
+    @Field(name = "pricingModel")
     private PodcastPricing pricingModel;
 
-    public Podcast(@NotNull String title, @NotNull String hostname,
-                   @NotNull String description, @NotNull PodcastPricing pricing ){
+    public Podcast(String title, String hostname,
+                   String description, PodcastPricing pricing) {
         this.description = description;
         this.hostname = hostname;
         this.title = title;
         this.pricingModel = pricing;
-        this.podcastIdentifier = new PodcastIdentifier();
     }
 }

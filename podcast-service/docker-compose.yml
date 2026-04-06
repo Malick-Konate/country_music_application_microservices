@@ -8,52 +8,108 @@ services:
       - "8083:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_URL=jdbc:mysql://podcast_mysql/podcast
-      - SPRING_DATASOURCE_USERNAME=user
-      - SPRING_DATASOURCE_PASSWORD=pwd
+#      - SPRING_DATA_MONGODB_URI=mongodb://user:pwd@mongodb_podcast:27017/podcast?authSource=admin
+#      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=admin
+#      - SPRING_DATA_MONGODB_DATABASE=podcast
+#      - SPRING_DATASOURCE_USERNAME=user
+#      - SPRING_DATASOURCE_PASSWORD=pwd
+      - SPRING_DATA_MONGODB_HOST=mongodb_podcast
+      - SPRING_DATA_MONGODB_PORT=27017
+      - SPRING_DATA_MONGODB_USERNAME=user
+      - SPRING_DATA_MONGODB_PASSWORD=pwd
+      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=admin
+      - SPRING_DATA_MONGODB_DATABASE=podcast
     depends_on:
-      podcast_mysql:
+      mongodb_podcast:
         condition: service_healthy
 
-  podcast_mysql:
-    image: mysql:8
+  mongodb_podcast:
+    image: mongo:8.0
+    container_name: mongodb_podcast
+#    hostname: mongodb_podcast
+    restart: always
     ports:
-      - "3309:3306"
-    environment:
-      - MYSQL_ROOT_PASSWORD=rootpass
-      - MYSQL_DATABASE=podcast
-      - MYSQL_USER=user
-      - MYSQL_PASSWORD=pwd
+      - "27017:27017"
     volumes:
-      - ./data/mysql-podcast:/var/lib/podcast_mysql
-      - ./data/init.d:/docker-entrypoint-initdb.d
+      - mongodb_data:/data/db
+      - ./init-db.js:/docker-entrypoint-initdb.d/init-db.js:ro
+
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=user
+      - MONGO_INITDB_ROOT_PASSWORD=pwd
+      - MONGO_INITDB_DATABASE=podcast
+#      - ME_CONFIG_MONGODB_ADMINUSERNAME=user
+#      - ME_CONFIG_MONGODB_ADMINPASSWORD=pwd
+#      - ME_CONFIG_MONGODB_SERVER=mongodb_podcast
+#      - ME_CONFIG_MONGODB_AUTH_DATABASE=admin
+#      - ME_CONFIG_MONGODB_DATABASE=podcast
+#      - ME_CONFIG_MONGODB_USER=user
+#      - ME_CONFIG_MONGODB_PASSWORD=pwd
     healthcheck:
-      test:
-        [
-          "CMD",
-          "mysqladmin",
-          "ping",
-          "-uuser",
-          "-ppwd",
-          "-h",
-          "localhost",
-        ]
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s
       timeout: 5s
       retries: 10
 
-  phpmyadmin:
-    image: phpmyadmin:5.2.0
-    container_name: podcast_servicePHPMYADMIN
-    links:
-      - podcast_mysql
-    restart: always
-    ports:
-      - 5015:80
-    environment:
-#      - PMA_ARBITRARY=1
-      - PMA_HOST=podcast_mysql
 
+  mongo-express:
+    image: mongo-express
+    container_name: mongo_express
+#    hostname: mongo_express
+    restart: always
+
+    ports:
+      - "8088:8081"
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=user
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=pwd
+      - ME_CONFIG_MONGODB_SERVER=mongodb_podcast
+      - ME_CONFIG_MONGODB_AUTH_DATABASE=admin
     depends_on:
-      podcast_mysql:
+      mongodb_podcast:
         condition: service_healthy
+volumes:
+  mongodb_data: { }
+
+#  podcast_mysql:
+#    image: mysql:8
+#    ports:
+#      - "3309:3306"
+#    environment:
+#      - MYSQL_ROOT_PASSWORD=rootpass
+#      - MYSQL_DATABASE=podcast
+#      - MYSQL_USER=user
+#      - MYSQL_PASSWORD=pwd
+#    volumes:
+#      - ./data/mysql-podcast:/var/lib/podcast_mysql
+#      - ./data/init.d:/docker-entrypoint-initdb.d
+#    healthcheck:
+#      test:
+#        [
+#          "CMD",
+#          "mysqladmin",
+#          "ping",
+#          "-uuser",
+#          "-ppwd",
+#          "-h",
+#          "localhost",
+#        ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 10
+#
+#  phpmyadmin:
+#    image: phpmyadmin:5.2.0
+#    container_name: podcast_servicePHPMYADMIN
+#    links:
+#      - podcast_mysql
+#    restart: always
+#    ports:
+#      - 5015:80
+#    environment:
+##      - PMA_ARBITRARY=1
+#      - PMA_HOST=podcast_mysql
+#
+#    depends_on:
+#      podcast_mysql:
+#        condition: service_healthy

@@ -1,15 +1,14 @@
 package com.konate.music_application.podcastsubdomain.DataLayer.Episode;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
 import lombok.Getter;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import static java.util.UUID.randomUUID;
 
-@Embeddable
+//@Embeddable
 @Getter
 public class EpisodeIdentifier {
-    @Column(name = "episode_id")
+    @Field(name = "episodeId")
     private String episodeId;
 
     public EpisodeIdentifier(){

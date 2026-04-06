@@ -7,72 +7,53 @@ logging:
   level:
     root: INFO
     com.konate: DEBUG
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.boot.test: DEBUG
+    de.flapdoodle.embed.mongo: DEBUG
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+
 
 ---
 
-##for h2
-
-
-
-
-#spring:
-#  config:
-#    activate:
-#      on-profile: h2
-#
-#  h2:
-#    console:
-#      enabled: true
-#
-#  datasource:
-#    url: jdbc:h2:mem:employee;DB_CLOSE_DELAY=-1;NON_KEYWORDS=YEAR,VALUE
-#    driver-class-name: org.h2.Driver
-#    username: sa
-#    password:
-#
-#  jpa:
-#    show-sql: true
-#    hibernate:
-#      ddl-auto: none   #use create to allow jpa to auto-generate from Entity classes; use none to use schema-h2.sql
-#
-#    defer-datasource-initialization: true
-#
-#  sql:
-#    init:
-#      platform: h2
-#      mode: always
-#
-#
-#---
 
 # for docker
 
 spring:
-  #  config:
-  #    activate:
-  #      on-profile: docker
+    config:
+      activate:
+        on-profile: docker
+    data:
+      mongodb:
+#        uri: mongodb_podcast://user:pwd@mongodb:27017/podcast
+        host: mongodb_podcast
+        port: 27017
+        username: user
+        password: pwd
+        authentication-database: admin
+        database: podcast
+logging:
+  level:
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+    org.mongodb.driver: DEBUG
 
 
-  datasource:
-    url: jdbc:mysql://podcast_mysql/podcast
-    username: user
-    password: pwd
-
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: none   #use create to allow jpa to auto-generate from Entity classes; use none to use schema-h2.sql
-
-    defer-datasource-initialization: true
-
-  sql:
-    init:
-      platform: mysql
-      mode: always
-      schema-locations: classpath:schema.sql
-      data-locations: classpath:data.sql
+#    datasource:
+#      url: jdbc:mysql://podcast_mysql/podcast
+#      username: user
+#      password: pwd
+#
+#    jpa:
+#      show-sql: true
+#      hibernate:
+#        ddl-auto: none   #use create to allow jpa to auto-generate from Entity classes; use none to use schema-h2.sql
+#
+#      defer-datasource-initialization: true
+#
+#    sql:
+#      init:
+#        platform: mysql
+#        mode: always
+#        schema-locations: classpath:schema.sql
+#        data-locations: classpath:data.sql
 
 server.port: 8080
 
@@ -86,18 +67,23 @@ spring:
     activate:
       on-profile: test
 
-  datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+  data:
+    mongodb:
+      #      host: localhost
+      port: 0 # random port for embedded MongoDB
+      database: podcastTestDb
+      #      username: user
+      #      password: pwd
+      #      authentication-database: admin
 
-  jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    hibernate:
-      ddl-auto: create-drop
-    show-sql: false
+      auto-index-creation: true
+logging:
+  level:
+    root: INFO # or DEBUG if needed
+    com.konate: DEBUG # Set to DEBUG or TRACE
 
-  sql:
-    init:
-      mode: never
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 5.0.5

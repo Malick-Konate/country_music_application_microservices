@@ -5,6 +5,7 @@ import com.konate.music_application.podcastsubdomain.DataLayer.Episode.EpisodeId
 import com.konate.music_application.podcastsubdomain.DataLayer.Episode.EpisodeRepository;
 import com.konate.music_application.podcastsubdomain.DataLayer.Episode.EpisodeStatus;
 import com.konate.music_application.podcastsubdomain.DataLayer.Podcast.Podcast;
+import com.konate.music_application.podcastsubdomain.DataLayer.Podcast.PodcastIdentifier;
 import com.konate.music_application.podcastsubdomain.DataLayer.Podcast.PodcastRepository;
 import com.konate.music_application.podcastsubdomain.Exceptions.InconsistentPodcastException;
 import com.konate.music_application.podcastsubdomain.Exceptions.InvalidInputException;
@@ -39,10 +40,10 @@ public class EpisodeServiceImpl implements EpisodeService{
         if (podcastId == null ||podcastId.trim().isEmpty() )
             throw new InvalidInputException("Sorry, cannot be null.");
 
-        Podcast podcast = podcastRepository.findAllByPodcastIdentifier_PodcastId(podcastId);
+        Podcast podcast = podcastRepository.findAllByPodcastId(podcastId);
         if(podcast == null)
             throw new NotFoundException("Podcast not found with Id: " + podcastId);
-        List<Episode> episodes = episodeRepository.findAllByPodcastIdentifier_PodcastId(podcastId);
+        List<Episode> episodes = episodeRepository.findAllByPodcastId(podcastId);
         return responseMapper.entityListToResponseModelList(episodes);
     }
 
@@ -54,7 +55,7 @@ public class EpisodeServiceImpl implements EpisodeService{
         validateEpisodeInvariants(requestModel); // Run check
 
 
-        Podcast podcast = podcastRepository.findAllByPodcastIdentifier_PodcastId(podcastId);
+        Podcast podcast = podcastRepository.findAllByPodcastId(podcastId);
         if(podcast == null)
             throw new NotFoundException("Podcast not found with Id: " + podcastId);
 
@@ -66,7 +67,7 @@ public class EpisodeServiceImpl implements EpisodeService{
 
         try {
             Episode episode = requestMapper.toEntity(requestModel,
-                    new EpisodeIdentifier(), podcast.getPodcastIdentifier());
+                    new EpisodeIdentifier(), new PodcastIdentifier(podcastId));
             Episode savedEpisode = episodeRepository.save(episode);
             return responseMapper.toResponseModel(savedEpisode);
         } catch (Exception e) {
@@ -80,13 +81,13 @@ public class EpisodeServiceImpl implements EpisodeService{
         if (podcastId == null ||podcastId.trim().isEmpty() ||episodeId == null || episodeId.trim().isEmpty() )
             throw new InvalidInputException("Sorry, cannot be null.");
 
-        Podcast podcast = podcastRepository.findAllByPodcastIdentifier_PodcastId(podcastId);
+        Podcast podcast = podcastRepository.findAllByPodcastId(podcastId);
         if(podcast == null)
             throw new NotFoundException("Podcast not found with Id: " + podcastId);
-        Episode episode = episodeRepository.findAllByEpisodeIdentifier_EpisodeId(episodeId);
+        Episode episode = episodeRepository.findAllByEpisodeId(episodeId);
         if (episode == null)
             throw new NotFoundException("Episode not found at: " + episodeId);
-        if(!Objects.equals(podcast.getPodcastIdentifier().getPodcastId(), episode.getPodcastIdentifier().getPodcastId()))
+        if(!Objects.equals(podcast.getPodcastId(), episode.getPodcastId()))
             throw new NotFoundException("Episode: " + episodeId + " not found in the podcast: " + podcastId);
         return responseMapper.toResponseModel(episode);
     }
@@ -96,21 +97,24 @@ public class EpisodeServiceImpl implements EpisodeService{
         if (podcastId == null ||podcastId.trim().isEmpty() ||episodeId == null || episodeId.trim().isEmpty() )
             throw new InvalidInputException("Sorry, cannot be null.");
         validateEpisodeInvariants(requestModel); // Run check
-        Podcast podcast = podcastRepository.findAllByPodcastIdentifier_PodcastId(podcastId);
+        Podcast podcast = podcastRepository.findAllByPodcastId(podcastId);
         if(podcast == null)
             throw new NotFoundException("Podcast not found with Id: " + podcastId);
-        Episode episode = episodeRepository.findAllByEpisodeIdentifier_EpisodeId(episodeId);
+        Episode episode = episodeRepository.findAllByEpisodeId(episodeId);
         if (episode == null)
             throw new NotFoundException("Episode not found at: " + episodeId);
-        if(!Objects.equals(podcast.getPodcastIdentifier().getPodcastId(), episode.getPodcastIdentifier().getPodcastId()))
+        if(!Objects.equals(podcast.getPodcastIdentifier().getPodcastId(), episode.getPodcastId()))
             throw new NotFoundException("Episode: " + episodeId + " not found in the podcast: " + podcastId);
 
-        episode.setEpisodeTitle(requestModel.getEpisodeTitle());
-        episode.setDuration(requestModel.getDuration());
-        episode.setPublishDate(requestModel.getPublishDate());
-        episode.setStatus(requestModel.getStatus());
 
-        Episode updatedEpisode = episodeRepository.save(episode);
+        Episode mapping = requestMapper.toEntity(requestModel, new EpisodeIdentifier(), new PodcastIdentifier(podcastId));
+
+//        episode.setEpisodeTitle(requestModel.getEpisodeTitle());
+//        episode.setDuration(requestModel.getDuration());
+//        episode.setPublishDate(requestModel.getPublishDate());
+//        episode.setStatus(requestModel.getStatus());
+
+        Episode updatedEpisode = episodeRepository.save(mapping);
         return responseMapper.toResponseModel(updatedEpisode);
     }
 
@@ -119,13 +123,13 @@ public class EpisodeServiceImpl implements EpisodeService{
         if (podcastId == null ||podcastId.trim().isEmpty() ||episodeId == null || episodeId.trim().isEmpty() )
             throw new InvalidInputException("Sorry, cannot be null.");
 
-        Podcast podcast = podcastRepository.findAllByPodcastIdentifier_PodcastId(podcastId);
+        Podcast podcast = podcastRepository.findAllByPodcastId(podcastId);
         if(podcast == null)
             throw new NotFoundException("Podcast not found with Id: " + podcastId);
-        Episode episode = episodeRepository.findAllByEpisodeIdentifier_EpisodeId(episodeId);
+        Episode episode = episodeRepository.findAllByEpisodeId(episodeId);
         if (episode == null)
             throw new NotFoundException("Episode not found at: " + episodeId);
-        if(!Objects.equals(podcast.getPodcastIdentifier().getPodcastId(), episode.getPodcastIdentifier().getPodcastId()))
+        if(!Objects.equals(podcast.getPodcastIdentifier().getPodcastId(), episode.getPodcastId()))
             throw new NotFoundException("Episode: " + episodeId + " not found in the podcast: " + podcastId);
 
         episodeRepository.delete(episode);

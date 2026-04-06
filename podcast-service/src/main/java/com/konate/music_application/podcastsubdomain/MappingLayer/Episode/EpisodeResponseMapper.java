@@ -14,9 +14,10 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Mapper(componentModel = "spring")
 public interface EpisodeResponseMapper {
     @Mappings({
-            @Mapping(source = "episodeIdentifier.episodeId", target = "episodeId"),
+            @Mapping(source = "episodeId", target = "episodeId"),
             @Mapping(source = "episodeTitle", target = "episodeTitle"),
-            @Mapping(source = "duration", target = "duration"),
+//            @Mapping(source = "duration", target = "duration"),
+            @Mapping(expression = "java(java.sql.Time.valueOf(episode.getDuration()))", target = "duration"),
             @Mapping(source = "publishDate", target = "publishDate"),
             @Mapping(source = "status", target = "status")
     })
@@ -27,13 +28,13 @@ public interface EpisodeResponseMapper {
     @AfterMapping
     default void addLinks (@MappingTarget EpisodeResponseModel responseModel,  Episode episode){
         Link selfLink = linkTo(methodOn(PodcastController.class)
-                .getEpisodeById(episode.getPodcastIdentifier().getPodcastId(),episode.getEpisodeIdentifier().getEpisodeId()))
+                .getEpisodeById(episode.getPodcastId(),episode.getEpisodeId()))
                 .withSelfRel();
         Link allLinkPodcast = linkTo(methodOn(PodcastController.class).getAllPodcast()).withRel("all podcasts");
         Link allEpisode = linkTo(methodOn(PodcastController.class)
-                .getEpisodeById(episode.getPodcastIdentifier().getPodcastId(), episode.getEpisodeIdentifier().getEpisodeId())).withRel("all episodes fot this podcast");
+                .getEpisodeById(episode.getPodcastId(), episode.getEpisodeId())).withRel("all episodes for this podcast");
         Link delete = linkTo(methodOn(PodcastController.class)
-                .deleteEpisode(episode.getPodcastIdentifier().getPodcastId(), episode.getEpisodeIdentifier().getEpisodeId())).withRel("delete");
+                .deleteEpisode(episode.getPodcastId(), episode.getEpisodeId())).withRel("delete");
         responseModel.add(selfLink, allLinkPodcast,allEpisode, delete);
     }
 }

@@ -1,13 +1,11 @@
 package com.konate.music_application.podcastsubdomain.DataLayer.Podcast;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
 import lombok.Getter;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-@Embeddable
 @Getter
 public class PodcastIdentifier {
-    @Column(name = "podcast_id")
+    @Field(name = "podcastId")
     private String podcastId;
 
     public PodcastIdentifier (){
