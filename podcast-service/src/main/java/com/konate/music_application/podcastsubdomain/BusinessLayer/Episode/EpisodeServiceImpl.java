@@ -103,7 +103,7 @@ public class EpisodeServiceImpl implements EpisodeService{
         Episode episode = episodeRepository.findAllByEpisodeId(episodeId);
         if (episode == null)
             throw new NotFoundException("Episode not found at: " + episodeId);
-        if(!Objects.equals(podcast.getPodcastIdentifier().getPodcastId(), episode.getPodcastId()))
+        if(!Objects.equals(podcast.getPodcastId(), episode.getPodcastId()))
             throw new NotFoundException("Episode: " + episodeId + " not found in the podcast: " + podcastId);
 
 
@@ -129,7 +129,7 @@ public class EpisodeServiceImpl implements EpisodeService{
         Episode episode = episodeRepository.findAllByEpisodeId(episodeId);
         if (episode == null)
             throw new NotFoundException("Episode not found at: " + episodeId);
-        if(!Objects.equals(podcast.getPodcastIdentifier().getPodcastId(), episode.getPodcastId()))
+        if(!Objects.equals(podcast.getPodcastId(), episode.getPodcastId()))
             throw new NotFoundException("Episode: " + episodeId + " not found in the podcast: " + podcastId);
 
         episodeRepository.delete(episode);

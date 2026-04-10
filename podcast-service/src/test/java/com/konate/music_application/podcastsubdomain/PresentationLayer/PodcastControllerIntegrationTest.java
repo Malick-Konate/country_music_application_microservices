@@ -175,4 +175,89 @@ public class PodcastControllerIntegrationTest {
                 .exchange()
                 .expectStatus().isNotFound();
     }
+// --- EPISODE TESTS ---
+
+    @Test
+    void whenGetEpisodesByPodcastId_thenReturnEpisodeList() {
+        webTestClient.get()
+                .uri(BASE_URL + "/" + VALID_PODCAST_ID + "/episodes")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(EpisodeResponseModel.class)
+                .value(episodes -> {
+                    assertNotNull(episodes);
+                    assertFalse(episodes.isEmpty());
+                });
+    }
+
+    @Test
+    void whenGetEpisodeById_thenReturnEpisode() {
+        webTestClient.get()
+                .uri(BASE_URL + "/" + VALID_PODCAST_ID + "/episodes/" + VALID_EPISODE_ID)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(EpisodeResponseModel.class)
+                .value(episode -> {
+                    assertEquals(VALID_EPISODE_ID, episode.getEpisodeId());
+                });
+    }
+
+    @Test
+    void whenUpdateEpisode_thenReturnUpdatedEpisode() {
+        EpisodeRequestModel updateRequest = new EpisodeRequestModel(
+                "Updated Episode Title", new Time(0, 30, 0), new Date(), EpisodeStatus.PUBLISHED);
+
+        webTestClient.put()
+                .uri(BASE_URL + "/" + VALID_PODCAST_ID + "/episodes/" + VALID_EPISODE_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(updateRequest)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(EpisodeResponseModel.class)
+                .value(response -> {
+                    assertEquals("Updated Episode Title", response.getEpisodeTitle());
+                });
+    }
+
+
+    @Test
+    void whenCreatePodcastWithInvalidData_thenReturnUnprocessableEntity() {
+        // Example: Hostname contains spaces (which your service layer blocks)
+        PodcastRequestModel invalidPodcast = new PodcastRequestModel(
+                "Invalid Podcast", "Host Name With Spaces", "Description", PodcastPricing.FREE);
+
+        webTestClient.post()
+                .uri(BASE_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(invalidPodcast)
+                .exchange()
+                .expectStatus().isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @Test
+    void whenUpdateNonExistentEpisode_thenReturnNotFound() {
+        EpisodeRequestModel request = new EpisodeRequestModel("Title", new Time(0, 30, 0), new Date(), EpisodeStatus.PUBLISHED);
+
+        webTestClient.put()
+                .uri(BASE_URL + "/" + VALID_PODCAST_ID + "/episodes/non-existent-id")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(request)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    void whenDeletePodcast_thenReturnNoContent() {
+        // Delete podcast
+        webTestClient.delete()
+                .uri(BASE_URL + "/pod_country_001")
+                .exchange()
+                .expectStatus().isNoContent();
+
+        // Verify it's gone
+        webTestClient.get()
+                .uri(BASE_URL + "/pod_country_001")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
 }
