@@ -1,0 +1,146 @@
+[
+  {
+    "_class": "com.konate.music_application.podcastsubdomain.DataLayer.Podcast.Podcast",
+    "podcastId": "pod_country_001",
+    "title": "Honky Tonk History",
+    "hostname": "Clint Blackman",
+    "description": "Deep dives into the history of classic country music from the 1950s to the 1990s.",
+    "pricingModel": "FREE"
+  },
+  {
+    "_class": "com.konate.music_application.podcastsubdomain.DataLayer.Podcast.Podcast",
+    "podcastId": "pod_country_002",
+    "title": "Nashville Insider",
+    "hostname": "Sarah Twang",
+    "description": "Behind the scenes news and interviews from Music City USA.",
+    "pricingModel": "SUBSCRIPTION"
+  },
+  {
+    "_class": "com.konate.music_application.podcastsubdomain.DataLayer.Podcast.Podcast",
+    "podcastId": "pod_country_003",
+    "title": "Bluegrass Breakdown",
+    "hostname": "Earl Scruggs Jr.",
+    "description": "Exploring the fast-picking world of banjos, fiddles, and mandolins.",
+    "pricingModel": "FREE"
+  },
+  {
+    "_class": "com.konate.music_application.podcastsubdomain.DataLayer.Podcast.Podcast",
+    "podcastId": "pod_country_004",
+    "title": "The Slide Guitar Hour",
+    "hostname": "Jerry Douglas Fan",
+    "description": "Tutorials and appreciation for dobro and slide guitar techniques.",
+    "pricingModel": "PER_EPISODE"
+  },
+  {
+    "_class": "com.konate.music_application.podcastsubdomain.DataLayer.Podcast.Podcast",
+    "podcastId": "pod_country_005",
+    "title": "Modern Country Monthly",
+    "hostname": "Taylor Shelton",
+    "description": "Reviews and discussions on the latest hits topping the Billboard Country charts.",
+    "pricingModel": "FREE"
+  },
+  {
+    "_class": "com.konate.music_application.podcastsubdomain.DataLayer.Podcast.Podcast",
+    "podcastId": "pod_country_006",
+    "title": "Legends of the Grand Ole Opry",
+    "hostname": "Opry Fanatic",
+    "description": "Stories about the most legendary performances on the most famous stage in country music.",
+    "pricingModel": "SUBSCRIPTION"
+  },
+  {
+    "_class": "com.konate.music_application.podcastsubdomain.DataLayer.Podcast.Podcast",
+    "podcastId": "pod_country_007",
+    "title": "Texas Red Dirt Radio",
+    "hostname": "Pat Greenish",
+    "description": "Focusing on the gritty, independent country music scene from Texas and Oklahoma.",
+    "pricingModel": "FREE"
+  },
+  {
+    "_class": "com.konate.music_application.podcastsubdomain.DataLayer.Podcast.Podcast",
+    "podcastId": "pod_country_008",
+    "title": "Songwriters Circle",
+    "hostname": "Kris Kristofferson AI",
+    "description": "Deconstructing the lyrics and composition of the greatest country songs ever written.",
+    "pricingModel": "PER_EPISODE"
+  },
+  {
+    "_class": "com.konate.music_application.podcastsubdomain.DataLayer.Podcast.Podcast",
+    "podcastId": "pod_country_009",
+    "title": "Banjo & Bourbon",
+    "hostname": "The Kentucky Boys",
+    "description": "Casual conversations about roots music over a glass of fine bourbon.",
+    "pricingModel": "FREE"
+  },
+  {
+    "_class": "com.konate.music_application.podcastsubdomain.DataLayer.Podcast.Podcast",
+    "podcastId": "pod_country_010",
+    "title": "Women of Country",
+    "hostname": "Dolly Parton Tribute",
+    "description": "Celebrating the female trailblazers of country music from Patsy Cline to Miranda Lambert.",
+    "pricingModel": "FREE"
+  },
+  {
+    "_class": "com.konate.music_application.podcastsubdomain.DataLayer.Podcast.Podcast",
+    "podcastId": "pod_country_011",
+    "title": "Outlaw Country Chronicles",
+    "hostname": "Waylon Willie",
+    "description": "Tales from the rebellious side of country music featuring Willie, Waylon, and Merle.",
+    "pricingModel": "SUBSCRIPTION"
+  },
+  {
+    "_class": "com.konate.music_application.podcastsubdomain.DataLayer.Podcast.Podcast",
+    "podcastId": "pod_country_012",
+    "title": "Folk & Americana Roots",
+    "hostname": "John Prine Spirit",
+    "description": "Exploring the softer, storytelling side of American roots music.",
+    "pricingModel": "FREE"
+  },
+  {
+    "_class": "com.konate.music_application.podcastsubdomain.DataLayer.Podcast.Podcast",
+    "podcastId": "pod_country_013",
+    "title": "Truckers Tunes",
+    "hostname": "Big Rig Rob",
+    "description": "The best driving songs for long hauls across the interstate.",
+    "pricingModel": "PER_EPISODE"
+  },
+  {
+    "_class": "com.konate.music_application.podcastsubdomain.DataLayer.Podcast.Podcast",
+    "podcastId": "pod_country_014",
+    "title": "Gospel Country Sunday",
+    "hostname": "Reverend Cash",
+    "description": "Uplifting country gospel music for your Sunday morning.",
+    "pricingModel": "FREE"
+  },
+  {
+    "_class": "com.konate.music_application.podcastsubdomain.DataLayer.Podcast.Podcast",
+    "podcastId": "pod_country_015",
+    "title": "Steel Guitar Secrets",
+    "hostname": "Paul Franklin Fan",
+    "description": "Technical deep dives into pedal steel guitar mechanics and playing styles.",
+    "pricingModel": "SUBSCRIPTION"
+  },
+  {
+    "_class": "com.konate.music_application.podcastsubdomain.DataLayer.Podcast.Podcast",
+    "podcastId": "pod_country_016",
+    "title": "Canadian Country Spotlight",
+    "hostname": "Northern Nashville",
+    "description": "Highlighting the biggest names and rising stars in Canadian country music.",
+    "pricingModel": "FREE"
+  },
+  {
+    "_class": "com.konate.music_application.podcastsubdomain.DataLayer.Podcast.Podcast",
+    "podcastId": "pod_country_017",
+    "title": "Country Song Breakdown",
+    "hostname": "Studio Session Sam",
+    "description": "Breaking down the production, lyrics, and songwriting techniques behind today’s biggest country hits.",
+    "pricingModel": "SUBSCRIPTION"
+  },
+  {
+    "_class": "com.konate.music_application.podcastsubdomain.DataLayer.Podcast.Podcast",
+    "podcastId": "pod_country_018",
+    "title": "Backstage at the Opry",
+    "hostname": "Southern Stage Mike",
+    "description": "Exclusive backstage-style storytelling from legendary country venues and festivals.",
+    "pricingModel": "PER_EPISODE"
+  }
+]

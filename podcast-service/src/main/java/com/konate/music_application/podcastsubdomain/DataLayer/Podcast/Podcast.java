@@ -35,7 +35,7 @@ public class Podcast {
     private String description;
 
     //    @Enumerated(EnumType.STRING)
-    @Field(name = "pricingModel")
+    @Field(name = "pricing_model")
     private PodcastPricing pricingModel;
 
     public Podcast(String title, String hostname,

@@ -69,12 +69,12 @@ spring:
 
   data:
     mongodb:
-      #      host: localhost
+      host: localhost
       port: 0 # random port for embedded MongoDB
       database: podcastTestDb
-      #      username: user
-      #      password: pwd
-      #      authentication-database: admin
+      username: user
+      password: pwd
+      authentication-database: admin
 
       auto-index-creation: true
 logging:

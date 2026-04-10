@@ -32,7 +32,7 @@ services:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
-      - ./init-db.js:/docker-entrypoint-initdb.d/init-db.js:ro
+#      - ./init-db.js:/docker-entrypoint-initdb.d/init-db.js:ro
 
     environment:
       - MONGO_INITDB_ROOT_USERNAME=user

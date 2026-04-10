@@ -43,7 +43,7 @@ public class Episode {
     @Field(name = "duration")
     private String duration;
 
-    @Field(name = "publishDate")
+    @Field(name = "publish_date")
     private Date publishDate;
 
     //    @Enumerated(EnumType.STRING)
