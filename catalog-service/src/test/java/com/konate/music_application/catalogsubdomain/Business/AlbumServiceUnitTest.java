@@ -32,7 +32,7 @@ class AlbumServiceUnitTest {
     private ArtistServiceClient artistServiceClient;
 
     @InjectMocks
-    private AlbumServiceImpl albumService; // Use your actual implementation class
+    private AlbumServiceImpl albumService;
 
     @Test
     void createAlbum_ArtistNotFound_ThrowsNotFoundException() {
