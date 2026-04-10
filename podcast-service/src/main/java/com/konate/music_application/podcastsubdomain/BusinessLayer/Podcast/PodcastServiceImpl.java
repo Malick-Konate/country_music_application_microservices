@@ -94,12 +94,14 @@ public class PodcastServiceImpl implements PodcastService {
 
         validatePodcastInvariants(requestModel); // Run check
 
-        podcastExisting.setDescription(requestModel.getDescription());
-        podcastExisting.setTitle(requestModel.getTitle());
-        podcastExisting.setHostname(requestModel.getHostname());
-        podcastExisting.setPricingModel(requestModel.getPricingModel());
+//        podcastExisting.setPodcastId(podcastId);
+//        podcastExisting.setDescription(requestModel.getDescription());
+//        podcastExisting.setTitle(requestModel.getTitle());
+//        podcastExisting.setHostname(requestModel.getHostname());
+//        podcastExisting.setPricingModel(requestModel.getPricingModel());
 
-        Podcast updatedPodcast = podcastRepository.save(podcastExisting);
+        Podcast updated = requestMapper.toPodcast(requestModel, new PodcastIdentifier(podcastId));
+        Podcast updatedPodcast = podcastRepository.save(updated);
         return responseMapper.toResponseModel(updatedPodcast);
     }
 

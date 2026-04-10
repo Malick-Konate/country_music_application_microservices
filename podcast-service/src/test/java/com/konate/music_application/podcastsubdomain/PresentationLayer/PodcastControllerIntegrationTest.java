@@ -7,6 +7,7 @@ import com.konate.music_application.podcastsubdomain.PresentationLayer.Episode.E
 import com.konate.music_application.podcastsubdomain.PresentationLayer.Episode.EpisodeResponseModel;
 import com.konate.music_application.podcastsubdomain.PresentationLayer.Podcast.PodcastRequestModel;
 import com.konate.music_application.podcastsubdomain.PresentationLayer.Podcast.PodcastResponseModel;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,10 +37,16 @@ public class PodcastControllerIntegrationTest {
     private final String BASE_URL = "/api/v1/podcasts";
 
     // Existing IDs from your data.sql
-    private final String VALID_PODCAST_ID = "pod_country_001";
+    private final String VALID_PODCAST_ID = "pod_country_017";
     private final String VALID_EPISODE_ID = "ep_058";
-    private final String VALID_HOSTNAME = "Clint Blackman";
+    private final String VALID_HOSTNAME = "Earl Scruggs Jr."; // Added period
     private final String NOT_FOUND_ID = "NOT-FOUND";
+
+    @BeforeEach
+    void setUp() {
+        // If you need to reset any state before each test, do it here.
+        // With @DirtiesContext, the context is refreshed after each test, so the database should be clean.
+    }
 
     // --- PODCAST TESTS ---
 
@@ -68,14 +75,16 @@ public class PodcastControllerIntegrationTest {
                 .expectBody(PodcastResponseModel.class)
                 .value(podcast -> {
                     assertEquals(VALID_PODCAST_ID, podcast.getPodcastId());
-                    assertEquals("Honky Tonk History", podcast.getTitle());
+                    assertEquals("Country Song Breakdown", podcast.getTitle());
+                    assertEquals("Studio Session Sam", podcast.getHostname());
+                    assertNotEquals(VALID_HOSTNAME, podcast.getHostname());
                 });
     }
 
     @Test
     void whenValidHostname_thenReturnPodcasts() {
         webTestClient.get()
-                .uri(BASE_URL + "/hostname/" + VALID_HOSTNAME)
+                .uri(BASE_URL + "/by-host/" + VALID_HOSTNAME)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBodyList(PodcastResponseModel.class)
@@ -87,7 +96,7 @@ public class PodcastControllerIntegrationTest {
 
     @Test
     void whenCreateValidPodcast_thenStatusCreated() {
-        PodcastRequestModel request = new PodcastRequestModel("New Podcast", "Host X", "Desc", PodcastPricing.FREE);
+        PodcastRequestModel request = new PodcastRequestModel("New Podcast", "HostX", "Desc", PodcastPricing.FREE);
 
         webTestClient.post()
                 .uri(BASE_URL)
@@ -101,7 +110,7 @@ public class PodcastControllerIntegrationTest {
 
     @Test
     void whenUpdatePodcast_thenReturnUpdatedPodcast() {
-        PodcastRequestModel updateRequest = new PodcastRequestModel("Updated Title", "New Host", "New Desc", PodcastPricing.SUBSCRIPTION);
+        PodcastRequestModel updateRequest = new PodcastRequestModel("Updated Title", "NewHost", "New Desc", PodcastPricing.SUBSCRIPTION);
 
         webTestClient.put()
                 .uri(BASE_URL + "/" + VALID_PODCAST_ID)

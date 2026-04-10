@@ -107,7 +107,7 @@ public class EpisodeServiceImpl implements EpisodeService{
             throw new NotFoundException("Episode: " + episodeId + " not found in the podcast: " + podcastId);
 
 
-        Episode mapping = requestMapper.toEntity(requestModel, new EpisodeIdentifier(), new PodcastIdentifier(podcastId));
+        Episode mapping = requestMapper.toEntity(requestModel, new EpisodeIdentifier(episodeId), new PodcastIdentifier(podcastId));
 
 //        episode.setEpisodeTitle(requestModel.getEpisodeTitle());
 //        episode.setDuration(requestModel.getDuration());
