@@ -88,7 +88,7 @@ public class EpisodeServiceImpl implements EpisodeService{
         if (episode == null)
             throw new NotFoundException("Episode not found at: " + episodeId);
         if(!Objects.equals(podcast.getPodcastId(), episode.getPodcastId()))
-            throw new NotFoundException("Episode: " + episodeId + " not found in the podcast: " + podcastId);
+            throw new InvalidInputException("Episode: " + episodeId + " not found in the podcast: " + podcastId);
         return responseMapper.toResponseModel(episode);
     }
 
@@ -104,7 +104,7 @@ public class EpisodeServiceImpl implements EpisodeService{
         if (episode == null)
             throw new NotFoundException("Episode not found at: " + episodeId);
         if(!Objects.equals(podcast.getPodcastId(), episode.getPodcastId()))
-            throw new NotFoundException("Episode: " + episodeId + " not found in the podcast: " + podcastId);
+            throw new InvalidInputException("Episode: " + episodeId + " not found in the podcast: " + podcastId);
 
 
         Episode mapping = requestMapper.toEntity(requestModel, new EpisodeIdentifier(episodeId), new PodcastIdentifier(podcastId));
@@ -130,7 +130,7 @@ public class EpisodeServiceImpl implements EpisodeService{
         if (episode == null)
             throw new NotFoundException("Episode not found at: " + episodeId);
         if(!Objects.equals(podcast.getPodcastId(), episode.getPodcastId()))
-            throw new NotFoundException("Episode: " + episodeId + " not found in the podcast: " + podcastId);
+            throw new InvalidInputException("Episode: " + episodeId + " not found in the podcast: " + podcastId);
 
         episodeRepository.delete(episode);
 
