@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseModel registerUser(UserRequestModel userRequestModel) {
-        if (userRequestModel == null)
+        if (userRequestModel == null || userRequestModel.getUsername() == null || userRequestModel.getPassword() == null)
             throw new InvalidInputException("cannot be null: " + userRequestModel);
 
         User existingUser = userRepository.findByUsername(userRequestModel.getUsername());

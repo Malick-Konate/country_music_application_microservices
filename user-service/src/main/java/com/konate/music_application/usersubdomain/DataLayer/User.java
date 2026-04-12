@@ -41,10 +41,10 @@ public class User {
 //        // Default constructor
 //    }
 
-    public User(String username, String password, String email, String fullname) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.fullname = fullname;
-    }
+//    public User(String username, String password, String email, String fullname) {
+//        this.username = username;
+//        this.password = password;
+//        this.email = email;
+//        this.fullname = fullname;
+//    }
 }

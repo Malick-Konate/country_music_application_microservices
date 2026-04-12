@@ -63,8 +63,8 @@ public class UserController {
 //        return ResponseEntity.noContent().build();
 //    }
 
-    @PostMapping("/{username}/password")
-    public ResponseEntity<Void> changeUserPassword(@PathVariable String username, UserRequestModel requestModel) {
+    @PatchMapping("/{username}/password")
+    public ResponseEntity<Void> changeUserPassword(@PathVariable String username, @RequestBody UserRequestModel requestModel) {
         userService.changeUserPassword(username, requestModel);
         return ResponseEntity.noContent().build();
     }
