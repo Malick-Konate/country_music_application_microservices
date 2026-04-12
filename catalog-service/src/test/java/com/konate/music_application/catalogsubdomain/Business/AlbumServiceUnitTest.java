@@ -5,6 +5,8 @@ import com.konate.music_application.catalogsubdomain.DataLayer.*;
 import com.konate.music_application.catalogsubdomain.Exceptions.InconsistentAlbumException;
 import com.konate.music_application.catalogsubdomain.Exceptions.InvalidInputException;
 import com.konate.music_application.catalogsubdomain.Exceptions.NotFoundException;
+import com.konate.music_application.catalogsubdomain.MappingLayer.AlbumRequestMapper;
+import com.konate.music_application.catalogsubdomain.MappingLayer.AlbumResponseMapper;
 import com.konate.music_application.catalogsubdomain.PresentationLayer.AlbumRequestModel;
 import com.konate.music_application.catalogsubdomain.PresentationLayer.AlbumResponseModel;
 import com.konate.music_application.catalogsubdomain.domainClientLayer.ArtistModel;
@@ -23,7 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class AlbumServiceUnitTest {
+public class AlbumServiceUnitTest {
 
     @Mock
     private AlbumRepository albumRepository;
@@ -33,6 +35,12 @@ class AlbumServiceUnitTest {
 
     @InjectMocks
     private AlbumServiceImpl albumService;
+
+    @Mock
+    private AlbumRequestMapper albumRequestMapper;
+
+    @Mock
+    private AlbumResponseMapper albumResponseMapper;
 
     @Test
     void createAlbum_ArtistNotFound_ThrowsNotFoundException() {
@@ -74,5 +82,137 @@ class AlbumServiceUnitTest {
 
         // Act & Assert
         assertThrows(NotFoundException.class, () -> albumService.updateAlbum("ALB-XXX", new AlbumRequestModel()));
+    }
+
+    @Test
+    void createAlbum_ValidInput_ReturnsAlbum() {
+        // Arrange
+        AlbumRequestModel request = AlbumRequestModel.builder()
+                .artistId("ART-001")
+                .song(List.of(new Song()))
+                .build();
+
+        ArtistModel artist = new ArtistModel();
+        artist.setFirstName("John");
+        artist.setLastName("Doe");
+
+        Album albumEntity = new Album();
+        Album savedAlbum = new Album();
+
+        when(artistServiceClient.getArtistById("ART-001")).thenReturn(artist);
+        when(albumRequestMapper.toAlbum(any(), any(), any())).thenReturn(albumEntity);
+        when(albumRepository.save(albumEntity)).thenReturn(savedAlbum);
+        when(albumResponseMapper.toResponseModel(savedAlbum)).thenReturn(new AlbumResponseModel());
+
+        // Act
+        AlbumResponseModel result = albumService.createAlbum(request);
+
+        // Assert
+        assertNotNull(result);
+        verify(albumRepository, times(1)).save(albumEntity);
+    }
+
+    @Test
+    void getAlbumById_ValidId_ReturnsAlbum() {
+        // Arrange
+        Album album = new Album();
+        album.setArtist_ID("ART-001");
+
+        ArtistModel artist = new ArtistModel();
+        artist.setFirstName("John");
+        artist.setLastName("Doe");
+
+        when(albumRepository.findAllByAlbumIdentifier_AlbumId("ALB-1")).thenReturn(album);
+        when(artistServiceClient.getArtistById("ART-001")).thenReturn(artist);
+        when(albumResponseMapper.toResponseModel(album)).thenReturn(new AlbumResponseModel());
+
+        // Act
+        AlbumResponseModel result = albumService.getAlbumById("ALB-1");
+
+        // Assert
+        assertNotNull(result);
+    }
+
+    @Test
+    void getAllAlbums_ReturnsList() {
+        // Arrange
+        Album album = new Album();
+        album.setArtist_ID("ART-001");
+
+        ArtistModel artist = new ArtistModel();
+        artist.setFirstName("John");
+        artist.setLastName("Doe");
+
+        when(albumRepository.findAll()).thenReturn(List.of(album));
+        when(artistServiceClient.getArtistById("ART-001")).thenReturn(artist);
+        when(albumResponseMapper.toResponseModel(album)).thenReturn(new AlbumResponseModel());
+
+        // Act
+        List<AlbumResponseModel> result = albumService.getAllAlbums();
+
+        // Assert
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void updateAlbum_ValidInput_ReturnsUpdatedAlbum() {
+        // Arrange
+        Album existing = new Album();
+        existing.setArtist_ID("ART-001");
+
+        AlbumRequestModel request = AlbumRequestModel.builder()
+                .artistId("ART-001")
+                .title("New Title")
+                .build();
+
+        ArtistModel artist = new ArtistModel();
+        artist.setFirstName("John");
+        artist.setLastName("Doe");
+
+        when(albumRepository.findAllByAlbumIdentifier_AlbumId("ALB-1")).thenReturn(existing);
+        when(artistServiceClient.getArtistById("ART-001")).thenReturn(artist);
+        when(albumRepository.save(existing)).thenReturn(existing);
+        when(albumResponseMapper.toResponseModel(existing)).thenReturn(new AlbumResponseModel());
+
+        // Act
+        AlbumResponseModel result = albumService.updateAlbum("ALB-1", request);
+
+        // Assert
+        assertNotNull(result);
+        verify(albumRepository).save(existing);
+    }
+
+    @Test
+    void deleteAlbum_ValidId_DeletesAlbum() {
+        // Arrange
+        Album album = new Album();
+        when(albumRepository.findAllByAlbumIdentifier_AlbumId("ALB-1")).thenReturn(album);
+
+        // Act
+        albumService.deleteAlbum("ALB-1");
+
+        // Assert
+        verify(albumRepository, times(1)).delete(album);
+    }
+
+    @Test
+    void getAlbumByTitle_ValidTitle_ReturnsAlbum() {
+        // Arrange
+        Album album = new Album();
+        album.setArtist_ID("ART-001");
+
+        ArtistModel artist = new ArtistModel();
+        artist.setFirstName("John");
+        artist.setLastName("Doe");
+
+        when(albumRepository.findAllByTitle("Test")).thenReturn(album);
+        when(artistServiceClient.getArtistById("ART-001")).thenReturn(artist);
+        when(albumResponseMapper.toResponseModel(album)).thenReturn(new AlbumResponseModel());
+
+        // Act
+        AlbumResponseModel result = albumService.getAlbumByTitle("Test");
+
+        // Assert
+        assertNotNull(result);
     }
 }

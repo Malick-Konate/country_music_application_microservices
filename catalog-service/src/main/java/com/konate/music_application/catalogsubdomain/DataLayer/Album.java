@@ -47,13 +47,13 @@ public class Album {
     )
     private List<Song> song;
 
-    public Album(@NotNull String title, @NotNull Date releaseDate,
-                 @NotNull String recordLabel, @NotNull AlbumType albumType) {
-        this.albumIdentifier = new AlbumIdentifier();
-        this.title = title;
-        this.releaseDate = releaseDate;
-        this.recordLabel = recordLabel;
-        this.albumType = albumType;
-    }
+//    public Album(@NotNull String title, @NotNull Date releaseDate,
+//                 @NotNull String recordLabel, @NotNull AlbumType albumType) {
+//        this.albumIdentifier = new AlbumIdentifier();
+//        this.title = title;
+//        this.releaseDate = releaseDate;
+//        this.recordLabel = recordLabel;
+//        this.albumType = albumType;
+//    }
 
 }
