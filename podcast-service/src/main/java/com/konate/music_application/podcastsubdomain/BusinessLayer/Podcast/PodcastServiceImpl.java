@@ -89,19 +89,21 @@ public class PodcastServiceImpl implements PodcastService {
             throw new InvalidInputException("Sorry, cannot be null.");
 
         Podcast podcastExisting = podcastRepository.findAllByPodcastId(podcastId);
+        if (podcastExisting == null)
+            throw new NotFoundException("Podcast not found with Id: " + podcastId);
         if (requestModel == null)
-            throw new NotFoundException("Podcast request cannot be null");
+            throw new InvalidInputException("Podcast request cannot be null");
 
         validatePodcastInvariants(requestModel); // Run check
 
 //        podcastExisting.setPodcastId(podcastId);
-//        podcastExisting.setDescription(requestModel.getDescription());
-//        podcastExisting.setTitle(requestModel.getTitle());
-//        podcastExisting.setHostname(requestModel.getHostname());
-//        podcastExisting.setPricingModel(requestModel.getPricingModel());
+        podcastExisting.setDescription(requestModel.getDescription());
+        podcastExisting.setTitle(requestModel.getTitle());
+        podcastExisting.setHostname(requestModel.getHostname());
+        podcastExisting.setPricingModel(requestModel.getPricingModel());
 
-        Podcast updated = requestMapper.toPodcast(requestModel, new PodcastIdentifier(podcastId));
-        Podcast updatedPodcast = podcastRepository.save(updated);
+//        Podcast updated = requestMapper.toPodcast(requestModel, new PodcastIdentifier(podcastId));
+        Podcast updatedPodcast = podcastRepository.save(podcastExisting);
         return responseMapper.toResponseModel(updatedPodcast);
     }
 

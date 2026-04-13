@@ -107,14 +107,14 @@ public class EpisodeServiceImpl implements EpisodeService{
             throw new InvalidInputException("Episode: " + episodeId + " not found in the podcast: " + podcastId);
 
 
-        Episode mapping = requestMapper.toEntity(requestModel, new EpisodeIdentifier(episodeId), new PodcastIdentifier(podcastId));
+//        Episode mapping = requestMapper.toEntity(requestModel, new EpisodeIdentifier(episodeId), new PodcastIdentifier(podcastId));
 
-//        episode.setEpisodeTitle(requestModel.getEpisodeTitle());
-//        episode.setDuration(requestModel.getDuration());
-//        episode.setPublishDate(requestModel.getPublishDate());
-//        episode.setStatus(requestModel.getStatus());
+        episode.setEpisodeTitle(requestModel.getEpisodeTitle());
+        episode.setDuration(requestModel.getDuration().toString());
+        episode.setPublishDate(requestModel.getPublishDate());
+        episode.setStatus(requestModel.getStatus());
 
-        Episode updatedEpisode = episodeRepository.save(mapping);
+        Episode updatedEpisode = episodeRepository.save(episode);
         return responseMapper.toResponseModel(updatedEpisode);
     }
 
