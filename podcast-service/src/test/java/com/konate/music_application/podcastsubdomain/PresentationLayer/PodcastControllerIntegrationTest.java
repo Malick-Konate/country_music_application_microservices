@@ -151,7 +151,7 @@ public class PodcastControllerIntegrationTest {
 
     @Test
     void whenDeleteEpisode_thenReturnNoContent() {
-        // Note: Check your controller param order. You have @PathVariable episodeId, then podcastId in deleteEpisode
+        // Note: Check the controller param order. You have @PathVariable episodeId, then podcastId in deleteEpisode
         webTestClient.delete()
                 .uri(BASE_URL + "/pod_country_017/episodes/" + VALID_EPISODE_ID)
                 .exchange()
