@@ -87,10 +87,10 @@ public class PodcastServiceUnitTest {
     }
 
     @Test
-    void updatePodcast_NullRequest_ThrowsNotFoundException() {
+    void updatePodcast_NullRequest_ThrowsInvalidInputException() {
         // Based on your specific logic in PodcastServiceImpl
         when(podcastRepository.findAllByPodcastId("POD-123")).thenReturn(new Podcast());
-        assertThrows(NotFoundException.class, () -> podcastService.updatePodcast("POD-123", null));
+        assertThrows(InvalidInputException.class, () -> podcastService.updatePodcast("POD-123", null));
     }
 
     @Test
