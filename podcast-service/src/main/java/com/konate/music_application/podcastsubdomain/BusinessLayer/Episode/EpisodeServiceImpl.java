@@ -96,6 +96,9 @@ public class EpisodeServiceImpl implements EpisodeService{
     public EpisodeResponseModel updateEpisode(String podcastId, String episodeId, EpisodeRequestModel requestModel) {
         if (podcastId == null ||podcastId.trim().isEmpty() ||episodeId == null || episodeId.trim().isEmpty() )
             throw new InvalidInputException("Sorry, cannot be null.");
+
+        if (requestModel == null)
+            throw new InvalidInputException("Sorry, cannot be null.");
         validateEpisodeInvariants(requestModel); // Run check
         Podcast podcast = podcastRepository.findAllByPodcastId(podcastId);
         if(podcast == null)
@@ -106,6 +109,13 @@ public class EpisodeServiceImpl implements EpisodeService{
         if(!Objects.equals(podcast.getPodcastId(), episode.getPodcastId()))
             throw new InvalidInputException("Episode: " + episodeId + " not found in the podcast: " + podcastId);
 
+
+        if (requestModel.getEpisodeTitle() != null && !requestModel.getEpisodeTitle().trim().isEmpty()) {
+            Episode existingEpisode = episodeRepository.findAllByEpisodeTitle(requestModel.getEpisodeTitle());
+            if (existingEpisode != null && !existingEpisode.getEpisodeId().equals(episodeId)) {
+                throw new InvalidInputException("Another episode with title '" + requestModel.getEpisodeTitle() + "' already exists.");
+            }
+        }
 
 //        Episode mapping = requestMapper.toEntity(requestModel, new EpisodeIdentifier(episodeId), new PodcastIdentifier(podcastId));
 

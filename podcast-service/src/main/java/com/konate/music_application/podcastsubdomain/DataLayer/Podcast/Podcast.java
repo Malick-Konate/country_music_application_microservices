@@ -3,6 +3,7 @@ package com.konate.music_application.podcastsubdomain.DataLayer.Podcast;
 
 //import jakarta.persistence.*;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 //import org.antlr.v4.runtime.misc.NotNull;
@@ -13,6 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document(collection = "podcasts")
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
 public class Podcast {
     @Id
@@ -38,11 +40,11 @@ public class Podcast {
     @Field(name = "pricing_model")
     private PodcastPricing pricingModel;
 
-    public Podcast(String title, String hostname,
-                   String description, PodcastPricing pricing) {
-        this.description = description;
-        this.hostname = hostname;
-        this.title = title;
-        this.pricingModel = pricing;
-    }
+//    public Podcast(String title, String hostname,
+//                   String description, PodcastPricing pricing) {
+//        this.description = description;
+//        this.hostname = hostname;
+//        this.title = title;
+//        this.pricingModel = pricing;
+//    }
 }

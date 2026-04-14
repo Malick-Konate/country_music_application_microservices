@@ -181,7 +181,52 @@ public class EpisodeServiceUnitTest {
         );
     }
 
+    @Test
+    void updateEpisode_NullRequest_ThrowsInvalidInputException() {
+        // Act & Assert
+        // We remove the when(...) stub because the null check happens before the repository call.
+        assertThrows(InvalidInputException.class, () ->
+                episodeService.updateEpisode(VALID_PODCAST_ID, VALID_EPISODE_ID, null)
+        );
+    }
 
+    @Test
+    void updateEpisode_DuplicateTitle_ThrowsInvalidInputException() {
+        // Arrange
+        String duplicateTitle = "Existing Episode Title";
+
+        // 1. Create the request with the title we want to change to
+        EpisodeRequestModel request = buildValidEpisodeRequest();
+        request.setEpisodeTitle(duplicateTitle);
+
+        // 2. Mock the Podcast lookup
+        Podcast podcast = new Podcast();
+        podcast.setPodcastId(VALID_PODCAST_ID);
+        when(podcastRepository.findAllByPodcastId(VALID_PODCAST_ID)).thenReturn(podcast);
+
+        // 3. Mock the current Episode lookup (the one we are updating)
+        Episode currentEpisode = new Episode();
+        currentEpisode.setEpisodeId(VALID_EPISODE_ID);
+        currentEpisode.setPodcastId(VALID_PODCAST_ID);
+        when(episodeRepository.findAllByEpisodeId(VALID_EPISODE_ID)).thenReturn(currentEpisode);
+
+        // 4. Mock the title check: Return a DIFFERENT episode when searching by that title
+        Episode anotherEpisode = new Episode();
+        anotherEpisode.setEpisodeId("different-episode-id"); // Different from VALID_EPISODE_ID
+        anotherEpisode.setEpisodeTitle(duplicateTitle);
+
+        when(episodeRepository.findAllByEpisodeTitle(duplicateTitle)).thenReturn(anotherEpisode);
+
+        // Act & Assert
+        InvalidInputException exception = assertThrows(InvalidInputException.class, () ->
+                episodeService.updateEpisode(VALID_PODCAST_ID, VALID_EPISODE_ID, request)
+        );
+
+        assertEquals("Another episode with title '" + duplicateTitle + "' already exists.", exception.getMessage());
+
+        // Verify the repository was actually checked
+        verify(episodeRepository).findAllByEpisodeTitle(duplicateTitle);
+    }
     // Helper method
 
     private EpisodeRequestModel buildValidEpisodeRequest() {
