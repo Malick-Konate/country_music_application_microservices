@@ -42,11 +42,11 @@ public class GlobalControllerExceptionHandler {
         return createHttpErrorInfo(UNPROCESSABLE_ENTITY, request, ex);
     }
 
-//    @ResponseStatus(CONFLICT)
-//    @ExceptionHandler(InvalidOrderStateException.class)
-//    public HttpErrorInfo handleInvalidOrderStateException(WebRequest request, Exception ex) {
-//        return createHttpErrorInfo(CONFLICT, request, ex);
-//    }
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler(InvalidOrderStateException.class)
+    public HttpErrorInfo handleInvalidOrderStateException(WebRequest request, Exception ex) {
+        return createHttpErrorInfo(CONFLICT, request, ex);
+    }
 
     @ResponseStatus(UNPROCESSABLE_ENTITY)
     @ExceptionHandler(InvalidAdTargetException.class)

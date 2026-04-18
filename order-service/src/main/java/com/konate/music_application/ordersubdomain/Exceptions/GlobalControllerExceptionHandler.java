@@ -42,7 +42,7 @@ public class GlobalControllerExceptionHandler {
         return createHttpErrorInfo(UNPROCESSABLE_ENTITY, request, ex);
     }
 
-    @ResponseStatus(CONFLICT)
+    @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(InvalidOrderStateException.class)
     public HttpErrorInfo handleInvalidOrderStateException(WebRequest request, Exception ex) {
         return createHttpErrorInfo(CONFLICT, request, ex);

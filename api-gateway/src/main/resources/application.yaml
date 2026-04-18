@@ -12,6 +12,9 @@ app:
   catalog:
     host: localhost
     port: 7004
+  order:
+    host: localhost
+    port: 7005
 
 server:
   port: 8080
@@ -41,4 +44,7 @@ app:
     port: 8080
   catalog:
     host: catalog
+    port: 8080
+  order:
+    host: order
     port: 8080

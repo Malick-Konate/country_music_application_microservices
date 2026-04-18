@@ -407,11 +407,13 @@ services:
       - API_GATEWAY_ARTIST_PORT=8080
       - API_GATEWAY_PODCAST_PORT=8080
       - API_GATEWAY_CATALOG_PORT=8080
-      -
+      - API_GATEWAY_ORDER_HOST=order
+      - API_GATEWAY_ORDER_PORT=8080
     depends_on:
       - user
       - artist
       - podcast
       - catalog
+      - order
 volumes:
   mongodb_data: { }
