@@ -1,6 +1,5 @@
 package com.konate.music_application.apigateway.domainClientLayer.Order;
 
-import com.konate.music_application.ordersubdomain.DataLayer.ProductType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
