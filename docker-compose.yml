@@ -83,7 +83,7 @@ services:
 
   order:
     build:
-      context: .
+      context: ./order-service
       dockerfile: Dockerfile
     hostname: order
     ports:
