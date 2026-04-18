@@ -81,6 +81,21 @@ services:
         condition: service_healthy
 
 
+  order:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    hostname: order
+    ports:
+      - "8087:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://order_postgres/order
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=pwd
+    depends_on:
+      order_postgres:
+        condition: service_healthy
   ##############################################
   ################## msql#######################
 
@@ -104,7 +119,28 @@ services:
       timeout: 5s
       retries: 5
 
-#  user_mysql:
+  order_postgres:
+    image: postgres:latest
+    container_name: postgres1-order
+    hostname: postgres_order
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=user
+      - PGUSER=user
+      - POSTGRES_PASSWORD=pwd
+      - POSTGRES_DB=order
+    #    volumes:
+    #      - ./data/postgres:/var/lib/postgresql/data
+    #      - ./data/init.d:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: "pg_isready -h order_postgres"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  #  user_mysql:
 #    image: mysql:8
 #    ports:
 #      - "3307:3306"
@@ -269,6 +305,18 @@ services:
     depends_on:
       - user_postgres
 
+  pgadmin2:
+    image: dpage/pgadmin4:latest # Or a specific version
+    container_name: pgadmin1-order
+    restart: always
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@konate.com
+      - PGADMIN_DEFAULT_PASSWORD=adminpassword
+    ports:
+      - 9001:80
+    depends_on:
+      - order_postgres
+
   phpmyadmin-artist:
     image: phpmyadmin:5.2.0
     container_name: artist_servicePHPMYADMIN
@@ -359,6 +407,7 @@ services:
       - API_GATEWAY_ARTIST_PORT=8080
       - API_GATEWAY_PODCAST_PORT=8080
       - API_GATEWAY_CATALOG_PORT=8080
+      -
     depends_on:
       - user
       - artist

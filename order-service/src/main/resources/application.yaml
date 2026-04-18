@@ -1,0 +1,100 @@
+app:
+  artist:
+    host: localhost
+    port: 7001
+  user:
+    host: localhost
+    port: 7002
+  podcast:
+    host: localhost
+    port: 7003
+  catalog:
+    host: localhost
+    port: 7004
+server:
+  error:
+    include-message: always
+
+logging:
+  level:
+    root: INFO
+    com.konate: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+---
+
+spring:
+  config:
+    activate:
+      on-profile: docker
+
+
+  datasource:
+    url: jdbc:postgresql://order_postgres/order
+    username: user
+    password: pwd
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  #        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+
+  #  jpa:
+  #    show-sql: true
+  #    hibernate:
+  #      ddl-auto: none   #use create to allow jpa to auto-generate from Entity classes; use none to use schema-h2.sql
+  #
+  #    defer-datasource-initialization: true
+
+  sql:
+    init:
+      platform: postgresql
+      mode: always
+      schema-locations: classpath:schema.sql
+      data-locations: classpath:data.sql
+
+app:
+  artist:
+    host: artist
+    port: 8080
+  user:
+    host: user
+    port: 8080
+  podcast:
+    host: podcast
+    port: 8080
+  catalog:
+    host: catalog
+    port: 8080
+server.port: 8080
+
+spring.datasource.hikari.initializationFailTimeout: 70000
+
+
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+
+  sql:
+    init:
+      mode: never
