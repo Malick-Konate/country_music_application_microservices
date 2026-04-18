@@ -46,6 +46,11 @@ public class PodcastController {
         return new ResponseEntity<>(podcastService.createPodcast(requestModel), HttpStatus.CREATED);
     }
 
+    @GetMapping("/title/{title}")
+    public ResponseEntity<PodcastResponseModel> getPodcastByTitle(@PathVariable String title) {
+        return new ResponseEntity<>(podcastService.getPodcastByTitle(title), HttpStatus.OK);
+    }
+
     @PutMapping("/{podcastId}")
     public ResponseEntity<PodcastResponseModel> updatePodcast(@PathVariable String podcastId, @RequestBody PodcastRequestModel requestModel) {
         return new ResponseEntity<>(podcastService.updatePodcast(podcastId, requestModel), HttpStatus.OK);
