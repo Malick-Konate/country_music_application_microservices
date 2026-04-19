@@ -21,6 +21,6 @@ public interface OrderRequestMapper {
     })
     Order toOder(OrderRequestModel requestModel,
                  OrderIdentifier orderIdentifier,
-                 UserModel userIdentifier);
+                 UserModel userModel);
 }
 

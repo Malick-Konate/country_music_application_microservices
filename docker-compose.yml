@@ -124,7 +124,7 @@ services:
     container_name: postgres1-order
     hostname: postgres_order
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
       - POSTGRES_USER=user
       - PGUSER=user
@@ -293,9 +293,9 @@ services:
 #    depends_on:
 #      user_mysql:
 #        condition: service_healthy
-  pgadmin1:
+  pgadmin:
     image: dpage/pgadmin4:latest # Or a specific version
-    container_name: pgadmin1-user
+    container_name: pgadmin
     restart: always
     environment:
       - PGADMIN_DEFAULT_EMAIL=admin@konate.com
@@ -304,18 +304,19 @@ services:
       - 9000:80
     depends_on:
       - user_postgres
-
-  pgadmin2:
-    image: dpage/pgadmin4:latest # Or a specific version
-    container_name: pgadmin1-order
-    restart: always
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@konate.com
-      - PGADMIN_DEFAULT_PASSWORD=adminpassword
-    ports:
-      - 9001:80
-    depends_on:
       - order_postgres
+
+#  pgadmin2:
+#    image: dpage/pgadmin4:latest # Or a specific version
+#    container_name: pgadmin1-order
+#    restart: always
+#    environment:
+#      - PGADMIN_DEFAULT_EMAIL=admin@konate.com
+#      - PGADMIN_DEFAULT_PASSWORD=adminpassword
+#    ports:
+#      - 9001:80
+#    depends_on:
+#      - order_postgres
 
   phpmyadmin-artist:
     image: phpmyadmin:5.2.0

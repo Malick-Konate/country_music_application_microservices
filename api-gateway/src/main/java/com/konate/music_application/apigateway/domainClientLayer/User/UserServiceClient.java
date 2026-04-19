@@ -39,7 +39,7 @@ public class UserServiceClient {
     public UserResponseModel getUserById(String userId) {
 
         try {
-            String url = USER_SERVICE_BASE_url + "/" + userId;
+            String url = USER_SERVICE_BASE_url + "/id/" + userId;
             log.info("Calling User Service at {}", url);
             return restTemplate.getForObject(url, UserResponseModel.class);
 

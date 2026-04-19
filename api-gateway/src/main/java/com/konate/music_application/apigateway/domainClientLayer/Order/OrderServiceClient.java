@@ -57,7 +57,7 @@ public class OrderServiceClient {
         try {
             String url = ORDER_SERVICE_URL + "/" + orderId + "/cancel";
             log.info("Canceling order with id: {}, at OrderService URL: {}", orderId, url);
-            restTemplate.postForLocation(url, null);
+            restTemplate.delete(url);
         } catch (HttpClientErrorException ex) {
             throw handleHttpClientException(ex);
         }

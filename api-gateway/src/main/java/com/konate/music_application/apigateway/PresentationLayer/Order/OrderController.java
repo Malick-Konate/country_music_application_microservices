@@ -56,7 +56,7 @@ public class OrderController {
     }
 
     @GetMapping(
-            value = "/{userId}",
+            value = "/by-user/{userId}",
             produces = "application/json"
     )
     public ResponseEntity<List<OrderResponseModel>> getAllOrdersForUser(@PathVariable String userId) {

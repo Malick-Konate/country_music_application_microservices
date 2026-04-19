@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -81,8 +82,22 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderResponseModel> getAllOrdersForUser(String userId) {
         UserModel user = userService.getUserById(userId);
-        List<Order> orders = repository.findAllByUserIdentifier_UserId(userId);
+        List<Order> orders = repository.findOrderByUserIdentifier(userId);
         List<OrderResponseModel> responseModels = new ArrayList<>();
+
+//        do {
+//            Order order = repository.findAllByOrderIdentifier_OrderId(userId);
+//
+//            OrderResponseModel orderResponseModel = responseMapper.toRespondModel(order);
+//            orderResponseModel.setFullname(user.getFullname());
+//            orderResponseModel.setCountry(user.getCountry());
+//            orderResponseModel.setEmail(user.getEmail());
+//
+//            responseModels.add(orderResponseModel);
+//
+//        }while(Objects.equals(userId, user.getUserId()));
+
+
 
         for (Order order : orders) {
 
@@ -219,6 +234,7 @@ public class OrderServiceImpl implements OrderService {
         orderNew.setOrderStatus(OrderStatus.PENDING);
         orderNew.setOrderItems(hydratedItems);
         orderNew.setPayments(paymentList);
+        orderNew.setUserIdentifier(user.getUserId());
 
         Order savedOrder = repository.save(orderNew);
 

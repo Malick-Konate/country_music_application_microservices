@@ -47,9 +47,9 @@ public class OrderItem {
     }
 
     // Helper method to calculate subtotal for this item
-    public BigDecimal getSubTotal() {
-        return price.multiply(BigDecimal.valueOf(quantity));
-    }
+//    public BigDecimal getSubTotal() {
+//        return price.multiply(BigDecimal.valueOf(quantity));
+//    }
 
 
 }
