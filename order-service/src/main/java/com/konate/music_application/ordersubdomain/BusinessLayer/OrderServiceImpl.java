@@ -218,7 +218,7 @@ public class OrderServiceImpl implements OrderService {
         for (Payment p : requestModel.getPayments()) {
             paymentList.add(new Payment(
                     p.getAmount(), // Using the validated amount
-                    java.time.LocalDateTime.now(),
+                    null,
                     p.getMethod(),
                     PaymentStatus.PENDING,
                     p.getCurrency() != null ? p.getCurrency() : "USD"
@@ -307,7 +307,7 @@ public class OrderServiceImpl implements OrderService {
         List<Payment> updatedPayments = new ArrayList<>();
         for (Payment p : currentPayments) {
             updatedPayments.add(new Payment(
-                    p.getAmount(), p.getPaidAt(), p.getMethod(), newStatus, p.getCurrency()
+                    p.getAmount(), java.time.LocalDateTime.now(), p.getMethod(), newStatus, p.getCurrency()
             ));
         }
         return updatedPayments;
