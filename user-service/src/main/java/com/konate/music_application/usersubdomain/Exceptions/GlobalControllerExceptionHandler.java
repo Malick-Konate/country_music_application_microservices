@@ -41,6 +41,11 @@ public class GlobalControllerExceptionHandler {
     public HttpErrorInfo handleInvalidInputException(WebRequest request, Exception ex) {
         return createHttpErrorInfo(UNPROCESSABLE_ENTITY, request, ex);
     }
+    @ResponseStatus(INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(Exception.class)
+    public HttpErrorInfo handleGeneralException(WebRequest request, Exception ex) {
+        return createHttpErrorInfo(INTERNAL_SERVER_ERROR, request, ex);
+    }
 
 //    @ResponseStatus(CONFLICT)
 //    @ExceptionHandler(InvalidOrderStateException.class)

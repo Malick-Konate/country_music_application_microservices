@@ -1,4 +1,4 @@
-package com.konate.music_application.ordersubdomain.Exceptions;
+package com.konate.music_application.adsubdomain.Exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -42,11 +42,11 @@ public class GlobalControllerExceptionHandler {
         return createHttpErrorInfo(UNPROCESSABLE_ENTITY, request, ex);
     }
 
-    @ResponseStatus(BAD_REQUEST)
-    @ExceptionHandler(InvalidOrderStateException.class)
-    public HttpErrorInfo handleInvalidOrderStateException(WebRequest request, Exception ex) {
-        return createHttpErrorInfo(CONFLICT, request, ex);
-    }
+//    @ResponseStatus(BAD_REQUEST)
+//    @ExceptionHandler(InvalidOrderStateException.class)
+//    public HttpErrorInfo handleInvalidOrderStateException(WebRequest request, Exception ex) {
+//        return createHttpErrorInfo(CONFLICT, request, ex);
+//    }
 
     @ResponseStatus(UNPROCESSABLE_ENTITY)
     @ExceptionHandler(InvalidAdTargetException.class)
@@ -54,7 +54,7 @@ public class GlobalControllerExceptionHandler {
         return createHttpErrorInfo(UNPROCESSABLE_ENTITY, request, ex);
     }
 
-    @ResponseStatus(UNPROCESSABLE_ENTITY)
+    @ResponseStatus(CONFLICT)
     @ExceptionHandler(InvalidCampaignStateException.class)
     public HttpErrorInfo handleInvalidCampaignStateException(WebRequest request, Exception ex) {
         return createHttpErrorInfo(UNPROCESSABLE_ENTITY, request, ex);
@@ -77,6 +77,7 @@ public class GlobalControllerExceptionHandler {
     public HttpErrorInfo handleOrderConflictException(WebRequest request, Exception ex) {
         return createHttpErrorInfo(CONFLICT, request, ex);
     }
+
     @ResponseStatus(INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public HttpErrorInfo handleGeneralException(WebRequest request, Exception ex) {

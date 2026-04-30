@@ -96,6 +96,25 @@ services:
     depends_on:
       order_postgres:
         condition: service_healthy
+
+
+
+  ad:
+    build:
+      context: ./ad-service
+      dockerfile: Dockerfile
+    hostname: ad
+    ports:
+      - "8089:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ad_postgres/ad
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=pwd
+    depends_on:
+      ad_postgres:
+        condition: service_healthy
+
   ##############################################
   ################## msql#######################
 
@@ -276,6 +295,27 @@ services:
       timeout: 5s
       retries: 10
 
+  ad_postgres:
+    image: postgres:latest
+    container_name: postgres1-ad
+    hostname: postgres_ad
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_USER=user
+      - PGUSER=user
+      - POSTGRES_PASSWORD=pwd
+      - POSTGRES_DB=ad
+    #    volumes:
+    #      - ./data/postgres:/var/lib/postgresql/data
+    #      - ./data/init.d:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: "pg_isready -h ad_postgres"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
   ##############################################
 ################## phpmyadmin###################
 #  phpmyadmin:
@@ -305,6 +345,7 @@ services:
     depends_on:
       - user_postgres
       - order_postgres
+      - ad_postgres
 
 #  pgadmin2:
 #    image: dpage/pgadmin4:latest # Or a specific version
@@ -388,6 +429,7 @@ services:
 
 
 
+
 ######## API GATEWAY ########
 ############################
 
@@ -410,11 +452,14 @@ services:
       - API_GATEWAY_CATALOG_PORT=8080
       - API_GATEWAY_ORDER_HOST=order
       - API_GATEWAY_ORDER_PORT=8080
+      - API_GATEWAY_AD_HOST=ad
+      - API_GATEWAY_AD_PORT=8080
     depends_on:
       - user
       - artist
       - podcast
       - catalog
       - order
+      - ad
 volumes:
   mongodb_data: { }

@@ -15,6 +15,9 @@ app:
   order:
     host: localhost
     port: 7005
+  ad:
+    host: localhost
+    port: 7006
 
 server:
   port: 8080
@@ -47,4 +50,7 @@ app:
     port: 8080
   order:
     host: order
+    port: 8080
+  ad:
+    host: ad
     port: 8080

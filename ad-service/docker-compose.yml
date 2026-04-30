@@ -1,0 +1,79 @@
+services:
+  ad:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    hostname: ad
+    ports:
+      - "8089:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ad_postgres/ad
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=pwd
+    depends_on:
+      ad_postgres:
+        condition: service_healthy
+
+  ad_postgres:
+    image: postgres:latest
+    container_name: postgres1-ad
+    hostname: postgres_ad
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_USER=user
+      - PGUSER=user
+      - POSTGRES_PASSWORD=pwd
+      - POSTGRES_DB=ad
+    #    volumes:
+    #      - ./data/postgres:/var/lib/postgresql/data
+    #      - ./data/init.d:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: "pg_isready -h ad_postgres"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+#  adservice_mysql:
+#    image: mysql:8
+#    ports:
+#      - "3319:3306"
+#    environment:
+#      - MYSQL_ROOT_PASSWORD=rootpass
+#      - MYSQL_DATABASE=ad
+#      - MYSQL_USER=user
+#      - MYSQL_PASSWORD=pwd
+#    volumes:
+#      - ./data/mysql-ad:/var/lib/mysql
+#      - ./data/init.d:/docker-entrypoint-initdb.d
+#    healthcheck:
+#      test:
+#        [
+#          "CMD",
+#          "mysqladmin",
+#          "ping",
+#          "-uuser",
+#          "-ppwd",
+#          "-h",
+#          "localhost",
+#        ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 10
+#
+#  phpmyadmin:
+#    image: phpmyadmin:5.2.0
+#    container_name: ad_servicePHPMYADMIN
+#    links:
+#      - adservice_mysql
+#    restart: always
+#    ports:
+#      - 5020:80
+#    environment:
+##      - PMA_ARBITRARY=1
+#      - PMA_HOST=adservice_mysql
+#
+#    depends_on:
+#      adservice_mysql:
+#        condition: service_healthy

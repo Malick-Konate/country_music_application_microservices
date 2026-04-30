@@ -54,7 +54,7 @@ public class GlobalControllerExceptionHandler {
         return createHttpErrorInfo(UNPROCESSABLE_ENTITY, request, ex);
     }
 
-    @ResponseStatus(UNPROCESSABLE_ENTITY)
+    @ResponseStatus(CONFLICT)
     @ExceptionHandler(InvalidCampaignStateException.class)
     public HttpErrorInfo handleInvalidCampaignStateException(WebRequest request, Exception ex) {
         return createHttpErrorInfo(UNPROCESSABLE_ENTITY, request, ex);
