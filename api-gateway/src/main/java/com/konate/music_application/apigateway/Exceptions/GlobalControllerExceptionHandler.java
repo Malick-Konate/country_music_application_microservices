@@ -77,6 +77,11 @@ public class GlobalControllerExceptionHandler {
     public HttpErrorInfo handleOrderConflictException(WebRequest request, Exception ex) {
         return createHttpErrorInfo(CONFLICT, request, ex);
     }
+    @ResponseStatus(INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(Exception.class)
+    public HttpErrorInfo handleGeneralException(WebRequest request, Exception ex) {
+        return createHttpErrorInfo(INTERNAL_SERVER_ERROR, request, ex);
+    }
 
     private HttpErrorInfo createHttpErrorInfo(HttpStatus httpStatus, WebRequest request, Exception ex) {
         final String path = request.getDescription(false);
