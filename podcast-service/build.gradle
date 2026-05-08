@@ -65,7 +65,8 @@ dependencies {
     testImplementation('de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring3x:4.12.3')
 //    testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring30x:4.18.0'
 
-
+// Change from 2.6.0 to 2.7.0 as per Page 12 of the slides
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.8'
 }
 
 tasks.named('test') {

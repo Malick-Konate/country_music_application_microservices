@@ -34,8 +34,8 @@ logging:
   level:
     org.springframework.data.mongodb.core.MongoTemplate: DEBUG
     org.mongodb.driver: DEBUG
-
-
+springdoc:
+  enable-hateoas: false
 #    datasource:
 #      url: jdbc:mysql://podcast_mysql/podcast
 #      username: user

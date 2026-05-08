@@ -106,6 +106,8 @@ server.port: 8080
 
 spring.datasource.hikari.initializationFailTimeout: 60000
 
+springdoc:
+  enable-hateoas: false
 
 
 ---
