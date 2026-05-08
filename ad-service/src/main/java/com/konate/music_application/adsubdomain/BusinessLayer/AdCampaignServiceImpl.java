@@ -104,7 +104,7 @@ public class AdCampaignServiceImpl implements AdCampaignService {
 //        );
 
         newAd.setRemainingSpend(adRequestModel.getBudget());
-
+        newAd.setUserIdentifier(user.getUserId());
         AdCampaign savedCampaign = repository.save(newAd);
         AdResponseModel response = responseMapper.toAdResponseModel(savedCampaign);
         response.setUserName(user.getFullname());
