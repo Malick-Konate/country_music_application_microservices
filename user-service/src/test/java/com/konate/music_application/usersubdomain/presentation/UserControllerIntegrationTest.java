@@ -14,7 +14,13 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
-@SpringBootTest(webEnvironment = RANDOM_PORT)
+@SpringBootTest(
+        webEnvironment = RANDOM_PORT,
+        properties = {
+                "springdoc.api-docs.enabled=false",
+                "springdoc.swagger-ui.enabled=false"
+        }
+)
 @ActiveProfiles("test")
 @Sql({"/data.sql"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -221,7 +227,7 @@ public class UserControllerIntegrationTest {
         webTestClient.put()
                 .uri(BASE_URI + "/" + VALID_USER_NAME)
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue("") // invalid JSON
+                .bodyValue("not-valid-json") // Empty body
                 .exchange()
                 .expectStatus().is4xxClientError();
     }
@@ -282,6 +288,7 @@ public class UserControllerIntegrationTest {
                 .exchange()
                 .expectStatus().is4xxClientError();
     }
+
     private UserRequestModel buildSampleUser() {
         return UserRequestModel.builder()
                 .username("newuser")

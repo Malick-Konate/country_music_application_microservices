@@ -58,6 +58,7 @@ dependencies {
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}", "org.projectlombok:lombok:${lombokVersion}", "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
     testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 
+    implementation 'org.apache.httpcomponents.client5:httpclient5'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-webflux'
 // Only in the API Gateway build.gradle

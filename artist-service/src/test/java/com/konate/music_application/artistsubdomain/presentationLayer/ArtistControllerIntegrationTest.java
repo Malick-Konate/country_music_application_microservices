@@ -18,7 +18,13 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
-@SpringBootTest(webEnvironment = RANDOM_PORT)
+@SpringBootTest(
+        webEnvironment = RANDOM_PORT,
+        properties = {
+                "springdoc.api-docs.enabled=false",
+                "springdoc.swagger-ui.enabled=false"
+        }
+)
 @ActiveProfiles("test")
 @Sql({"/data.sql"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)

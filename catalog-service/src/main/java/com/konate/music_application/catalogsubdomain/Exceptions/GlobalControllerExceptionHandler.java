@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import static org.springframework.http.HttpStatus.*;
 
 
@@ -83,6 +83,11 @@ public class GlobalControllerExceptionHandler {
         return createHttpErrorInfo(INTERNAL_SERVER_ERROR, request, ex);
     }
 
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public HttpErrorInfo handleHttpMessageNotReadableException(WebRequest request, Exception ex) {
+        return createHttpErrorInfo(BAD_REQUEST, request, ex);
+    }
 
     private HttpErrorInfo createHttpErrorInfo(HttpStatus httpStatus, WebRequest request, Exception ex) {
         final String path = request.getDescription(false);

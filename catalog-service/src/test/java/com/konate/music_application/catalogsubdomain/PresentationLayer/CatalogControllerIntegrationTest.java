@@ -29,7 +29,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
-@SpringBootTest(webEnvironment = RANDOM_PORT)
+@SpringBootTest(
+        webEnvironment = RANDOM_PORT,
+        properties = {
+                "springdoc.api-docs.enabled=false",
+                "springdoc.swagger-ui.enabled=false"
+        }
+)
 @ActiveProfiles("test")
 @Sql({"/data.sql"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -168,9 +174,9 @@ public class CatalogControllerIntegrationTest {
         webTestClient.post()
                 .uri(BASE_URL + "/create")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue("") // Empty body
+                .bodyValue("not-valid-json") // Empty body
                 .exchange()
-                .expectStatus().is4xxClientError();
+                .expectStatus().isBadRequest();
     }
 
     @Test
