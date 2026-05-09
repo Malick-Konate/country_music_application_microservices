@@ -1,10 +1,7 @@
 package com.konate.music_application.ordersubdomain.BusinessLayer;
 
 import com.konate.music_application.ordersubdomain.DataLayer.*;
-import com.konate.music_application.ordersubdomain.Exceptions.InvalidInputException;
-import com.konate.music_application.ordersubdomain.Exceptions.InvalidOrderStateException;
-import com.konate.music_application.ordersubdomain.Exceptions.NotFoundException;
-import com.konate.music_application.ordersubdomain.Exceptions.OrderConflictException;
+import com.konate.music_application.ordersubdomain.Exceptions.*;
 import com.konate.music_application.ordersubdomain.MappingLayer.OrderRequestMapper;
 import com.konate.music_application.ordersubdomain.MappingLayer.OrderResponseMapper;
 import com.konate.music_application.ordersubdomain.PresentationLayer.OrderRequestModel;
@@ -127,6 +124,15 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponseModel createOrder(OrderRequestModel requestModel) {
         if (requestModel == null)
             throw new InvalidInputException("The request cannot be null.");
+
+        if (requestModel.getUserEmail() == null || requestModel.getUserEmail().trim().isEmpty())
+            throw new InvalidInputException("User email cannot be null or empty.");
+
+        if (requestModel.getOrderItems() == null || requestModel.getOrderItems().isEmpty())
+            throw new InvalidInputException("Order must contain at least one item.");
+
+        if (requestModel.getPayments() == null || requestModel.getPayments().isEmpty())
+            throw new InvalidInputException("Order must have at least one payment method.");
 
         // 1. Validate and Fetch User
         UserModel user = userService.getUserByEmail(requestModel.getUserEmail());
@@ -263,6 +269,18 @@ public class OrderServiceImpl implements OrderService {
         if (existingOrder == null) {
             throw new NotFoundException("Order not found with id: " + orderId);
         }
+        if (requestModel == null)
+            throw new InvalidInputException("The request cannot be null.");
+
+        if (requestModel.getUserEmail() == null || requestModel.getUserEmail().trim().isEmpty())
+            throw new InvalidInputException("User email cannot be null or empty.");
+
+        if (requestModel.getOrderItems() == null || requestModel.getOrderItems().isEmpty())
+            throw new InvalidInputException("Order must contain at least one item.");
+
+        if (requestModel.getPayments() == null || requestModel.getPayments().isEmpty())
+            throw new InvalidInputException("Order must have at least one payment method.");
+
 
         // 2. Business Logic: Prevent updates to cancelled or completed orders
         // AKA aggregate invariant
@@ -305,6 +323,7 @@ public class OrderServiceImpl implements OrderService {
 
     private List<Payment> updatePaymentStatus(List<Payment> currentPayments, PaymentStatus newStatus) {
         List<Payment> updatedPayments = new ArrayList<>();
+        if (currentPayments == null) return new ArrayList<>();
         for (Payment p : currentPayments) {
             updatedPayments.add(new Payment(
                     p.getAmount(), java.time.LocalDateTime.now(), p.getMethod(), newStatus, p.getCurrency()
