@@ -8,9 +8,7 @@ import com.konate.music_application.ordersubdomain.domainClientLayer.Artist.Arti
 import com.konate.music_application.ordersubdomain.domainClientLayer.Catalog.AlbumModel;
 import com.konate.music_application.ordersubdomain.domainClientLayer.Catalog.AlbumType;
 import com.konate.music_application.ordersubdomain.domainClientLayer.Catalog.CatalogServiceClient;
-import com.konate.music_application.ordersubdomain.domainClientLayer.Podcast.PodcastModel;
-import com.konate.music_application.ordersubdomain.domainClientLayer.Podcast.PodcastPricing;
-import com.konate.music_application.ordersubdomain.domainClientLayer.Podcast.PodcastServiceClient;
+import com.konate.music_application.ordersubdomain.domainClientLayer.Podcast.*;
 import com.konate.music_application.ordersubdomain.domainClientLayer.User.UserModel;
 import com.konate.music_application.ordersubdomain.domainClientLayer.User.UserServiceClient;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,7 +44,6 @@ public class OrderServiceClientsUnitTest {
     // Shared helpers
     // =========================================================================
 
-    /** Build an HttpClientErrorException with the given status and a fake JSON body */
     private HttpClientErrorException makeException(HttpStatus status) {
         return HttpClientErrorException.create(
                 status, status.getReasonPhrase(),
@@ -773,11 +770,87 @@ public class OrderServiceClientsUnitTest {
 
             assertThrows(NotFoundException.class, () -> client.deletePodcast("bad-id"));
         }
+// --- Episode Tests ---
 
+        @Test
+        void getEpisodes_WhenSuccess_ReturnsList() {
+            EpisodeModel episode = buildEpisode("EP-001");
+            EpisodeModel[] episodes = {episode};
+
+            when(restTemplate.getForObject(anyString(), eq(EpisodeModel[].class))).thenReturn(episodes);
+
+            List<EpisodeModel> result = client.getEpisodes("POD-001");
+
+            assertNotNull(result);
+            assertEquals(1, result.size());
+            assertEquals("EP-001", result.get(0).getEpisodeId());
+        }
+
+        @Test
+        void getEpisodeById_WhenSuccess_ReturnsEpisode() {
+            EpisodeModel episode = buildEpisode("EP-001");
+            when(restTemplate.getForObject(anyString(), eq(EpisodeModel.class))).thenReturn(episode);
+
+            EpisodeModel result = client.getEpisode("POD-001", "EP-001");
+
+            assertNotNull(result);
+            // FIX: Removed the .get(0) that I accidentally included last time!
+            assertEquals("EP-001", result.getEpisodeId());
+        }
+        @Test
+        void createEpisode_WhenSuccess_ReturnsCreatedEpisode() {
+            EpisodeModel request = buildEpisode("EP-001");
+            when(restTemplate.postForObject(anyString(), any(), eq(EpisodeModel.class))).thenReturn(request);
+
+            EpisodeModel result = client.createEpisode("POD-001", request);
+
+            assertNotNull(result);
+            assertEquals("EP-001", result.getEpisodeId());
+        }
+
+        @Test
+        void updateEpisode_WhenSuccess_ReturnsUpdatedEpisode() {
+            EpisodeModel updated = buildEpisode("EP-001");
+            updated.setEpisodeTitle("Updated Title");
+
+
+            doNothing().when(restTemplate).put(anyString(), any(), (Object[]) any());
+            when(restTemplate.getForObject(anyString(), eq(EpisodeModel.class))).thenReturn(updated);
+
+            EpisodeModel result = client.updateEpisode("POD-001", "EP-001", updated);
+
+            assertNotNull(result);
+            assertEquals("Updated Title", result.getEpisodeTitle());
+        }
+
+        @Test
+        void deleteEpisode_WhenSuccess_DeletesWithoutError() {
+
+            doNothing().when(restTemplate).delete(anyString(), (Object[]) any());
+
+            assertDoesNotThrow(() -> client.deleteEpisode("POD-001", "EP-001"));
+        }
+        @Test
+        void getEpisodeById_When404_ThrowsNotFoundException() throws IOException {
+            stubErrorMessage("episode not found");
+            when(restTemplate.getForObject(anyString(), eq(EpisodeModel.class)))
+                    .thenThrow(makeException(HttpStatus.NOT_FOUND));
+
+            assertThrows(NotFoundException.class, () -> client.getEpisode("POD-001", "bad-id"));
+        }
         // Helper
         private PodcastModel buildPodcast(String id) {
             return PodcastModel.builder().podcastId(id).title("Tech Talk Daily")
                     .hostname("John Host").pricingModel(PodcastPricing.FREE).build();
+        }
+        // Helper for Episode
+        private EpisodeModel buildEpisode(String id) {
+            return EpisodeModel.builder()
+                    .episodeId(id)
+                    .episodeTitle("How to Code")
+                    .duration(java.sql.Time.valueOf("00:45:00"))
+                    .status(EpisodeStatus.PUBLISHED)
+                    .build();
         }
     }
 }
