@@ -1,6 +1,7 @@
 package com.konate.music_application.apigateway.Exceptions;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -81,6 +82,11 @@ public class GlobalControllerExceptionHandler {
     @ExceptionHandler(Exception.class)
     public HttpErrorInfo handleGeneralException(WebRequest request, Exception ex) {
         return createHttpErrorInfo(INTERNAL_SERVER_ERROR, request, ex);
+    }
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public HttpErrorInfo handleHttpMessageNotReadableException(WebRequest request, Exception ex) {
+        return createHttpErrorInfo(BAD_REQUEST, request, ex);
     }
 
     private HttpErrorInfo createHttpErrorInfo(HttpStatus httpStatus, WebRequest request, Exception ex) {
