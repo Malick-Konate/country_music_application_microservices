@@ -177,14 +177,14 @@ assertCurl 200 "curl -s $BASE_URL/api/v1/users \
     -H 'accept: application/json'"
 
 echo -e "\nTest 2: GET user by seeded username (malick) returns 200"
-assertCurl 200 "curl -s $BASE_URL/api/v1/users/malick \
+assertCurl 200 "curl -s $BASE_URL/api/v1/users/amina \
     -H 'accept: application/json'"
-assertEqual '"malick"' $(echo $RESPONSE | jq '.username')
+assertEqual '"amina"' $(echo $RESPONSE | jq '.username')
 
 echo -e "\nTest 3: GET user by seeded ID (user-001) returns 200"
-assertCurl 200 "curl -s $BASE_URL/api/v1/users/id/user-001 \
+assertCurl 200 "curl -s $BASE_URL/api/v1/users/id/user-002 \
     -H 'accept: application/json'"
-assertEqual '"user-001"' $(echo $RESPONSE | jq '.userId')
+assertEqual '"user-002"' $(echo $RESPONSE | jq '.userId')
 
 echo -e "\nTest 4: GET newly created user by ID returns 200"
 assertCurl 200 "curl -s $BASE_URL/api/v1/users/id/$NEW_USER_ID \

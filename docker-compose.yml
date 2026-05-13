@@ -86,8 +86,8 @@ services:
       context: ./order-service
       dockerfile: Dockerfile
     hostname: order
-    ports:
-      - "8087:8080"
+#    ports:
+#      - "8087:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_URL=jdbc:postgresql://order_postgres/order
@@ -104,8 +104,8 @@ services:
       context: ./ad-service
       dockerfile: Dockerfile
     hostname: ad
-    ports:
-      - "8089:8080"
+#    ports:
+#      - "8089:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_URL=jdbc:postgresql://ad_postgres/ad
