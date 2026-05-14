@@ -41,15 +41,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-  #        dialect: org.hibernate.dialect.PostgreSQLDialect
 
-
-  #  jpa:
-  #    show-sql: true
-  #    hibernate:
-  #      ddl-auto: none   #use create to allow jpa to auto-generate from Entity classes; use none to use schema-h2.sql
-  #
-  #    defer-datasource-initialization: true
 
   sql:
     init:

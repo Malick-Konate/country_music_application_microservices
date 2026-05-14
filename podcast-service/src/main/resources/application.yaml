@@ -36,25 +36,6 @@ logging:
     org.mongodb.driver: DEBUG
 springdoc:
   enable-hateoas: false
-#    datasource:
-#      url: jdbc:mysql://podcast_mysql/podcast
-#      username: user
-#      password: pwd
-#
-#    jpa:
-#      show-sql: true
-#      hibernate:
-#        ddl-auto: none   #use create to allow jpa to auto-generate from Entity classes; use none to use schema-h2.sql
-#
-#      defer-datasource-initialization: true
-#
-#    sql:
-#      init:
-#        platform: mysql
-#        mode: always
-#        schema-locations: classpath:schema.sql
-#        data-locations: classpath:data.sql
-
 server.port: 8080
 
 spring.datasource.hikari.initializationFailTimeout: 60000

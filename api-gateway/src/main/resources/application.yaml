@@ -54,7 +54,6 @@ app:
   ad:
     host: ad
     port: 8080
-# ... keep your existing app: hosts/ports ...
 
 springdoc:
   enable-hateoas: false
