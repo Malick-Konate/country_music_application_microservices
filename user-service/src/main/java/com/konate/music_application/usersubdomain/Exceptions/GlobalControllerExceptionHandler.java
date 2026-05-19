@@ -31,12 +31,6 @@ public class GlobalControllerExceptionHandler {
         return createHttpErrorInfo(CONFLICT, request, ex);
     }
 
-//    @ResponseStatus(CONFLICT)
-//    @ExceptionHandler(ArtistFound.class)
-//    public HttpErrorInfo handleArtistFound(WebRequest request, Exception ex) {
-//        return createHttpErrorInfo(CONFLICT, request, ex);
-//    }
-
     @ResponseStatus(UNPROCESSABLE_ENTITY)
     @ExceptionHandler(InvalidInputException.class)
     public HttpErrorInfo handleInvalidInputException(WebRequest request, Exception ex) {
@@ -52,42 +46,6 @@ public class GlobalControllerExceptionHandler {
     public HttpErrorInfo handleHttpMessageNotReadableException(WebRequest request, Exception ex) {
         return createHttpErrorInfo(BAD_REQUEST, request, ex);
     }
-
-//    @ResponseStatus(CONFLICT)
-//    @ExceptionHandler(InvalidOrderStateException.class)
-//    public HttpErrorInfo handleInvalidOrderStateException(WebRequest request, Exception ex) {
-//        return createHttpErrorInfo(CONFLICT, request, ex);
-//    }
-//
-//    @ResponseStatus(UNPROCESSABLE_ENTITY)
-//    @ExceptionHandler(InvalidAdTargetException.class)
-//    public HttpErrorInfo handleInvalidAdTargetException(WebRequest request, Exception ex) {
-//        return createHttpErrorInfo(UNPROCESSABLE_ENTITY, request, ex);
-//    }
-//
-//    @ResponseStatus(UNPROCESSABLE_ENTITY)
-//    @ExceptionHandler(InvalidCampaignStateException.class)
-//    public HttpErrorInfo handleInvalidCampaignStateException(WebRequest request, Exception ex) {
-//        return createHttpErrorInfo(UNPROCESSABLE_ENTITY, request, ex);
-//    }
-//
-//    @ResponseStatus(UNPROCESSABLE_ENTITY)
-//    @ExceptionHandler(InconsistentAlbumException.class)
-//    public HttpErrorInfo handleInconsistentAlbumException(WebRequest request, Exception ex) {
-//        return createHttpErrorInfo(UNPROCESSABLE_ENTITY, request, ex);
-//    }
-//
-//    @ResponseStatus(UNPROCESSABLE_ENTITY)
-//    @ExceptionHandler(InconsistentPodcastException.class)
-//    public HttpErrorInfo handleInconsistentPodcastException(WebRequest request, Exception ex) {
-//        return createHttpErrorInfo(UNPROCESSABLE_ENTITY, request, ex);
-//    }
-//
-//    @ResponseStatus(CONFLICT)
-//    @ExceptionHandler(OrderConflictException.class)
-//    public HttpErrorInfo handleOrderConflictException(WebRequest request, Exception ex) {
-//        return createHttpErrorInfo(CONFLICT, request, ex);
-//    }
 
     private HttpErrorInfo createHttpErrorInfo(HttpStatus httpStatus, WebRequest request, Exception ex) {
         final String path = request.getDescription(false);
